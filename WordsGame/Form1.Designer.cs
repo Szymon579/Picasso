@@ -31,19 +31,20 @@
             clientButton = new Button();
             hostButton = new Button();
             label1 = new Label();
-            clientTextBox = new TextBox();
+            messageTextBox = new TextBox();
             trafficTextBox = new RichTextBox();
             hostTextBox = new Label();
-            textBox1 = new TextBox();
+            usernameTextBox = new TextBox();
             nameLabel = new Label();
             setUsernameButton = new Button();
             SuspendLayout();
             // 
             // clientButton
             // 
-            clientButton.Location = new Point(444, 12);
+            clientButton.Location = new Point(507, 16);
+            clientButton.Margin = new Padding(3, 4, 3, 4);
             clientButton.Name = "clientButton";
-            clientButton.Size = new Size(106, 34);
+            clientButton.Size = new Size(121, 45);
             clientButton.TabIndex = 1;
             clientButton.Text = "Client";
             clientButton.UseVisualStyleBackColor = true;
@@ -51,9 +52,10 @@
             // 
             // hostButton
             // 
-            hostButton.Location = new Point(12, 12);
+            hostButton.Location = new Point(14, 16);
+            hostButton.Margin = new Padding(3, 4, 3, 4);
             hostButton.Name = "hostButton";
-            hostButton.Size = new Size(106, 34);
+            hostButton.Size = new Size(121, 45);
             hostButton.TabIndex = 2;
             hostButton.Text = "Host";
             hostButton.UseVisualStyleBackColor = true;
@@ -62,57 +64,62 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(444, 115);
+            label1.Location = new Point(507, 476);
             label1.Name = "label1";
-            label1.Size = new Size(56, 15);
+            label1.Size = new Size(70, 20);
             label1.TabIndex = 3;
             label1.Text = "Message:";
             // 
-            // clientTextBox
+            // messageTextBox
             // 
-            clientTextBox.Location = new Point(444, 133);
-            clientTextBox.Name = "clientTextBox";
-            clientTextBox.Size = new Size(345, 23);
-            clientTextBox.TabIndex = 4;
+            messageTextBox.Location = new Point(507, 500);
+            messageTextBox.Margin = new Padding(3, 4, 3, 4);
+            messageTextBox.Name = "messageTextBox";
+            messageTextBox.Size = new Size(402, 27);
+            messageTextBox.TabIndex = 4;
             // 
             // trafficTextBox
             // 
-            trafficTextBox.Location = new Point(12, 82);
+            trafficTextBox.Location = new Point(507, 183);
+            trafficTextBox.Margin = new Padding(3, 4, 3, 4);
             trafficTextBox.Name = "trafficTextBox";
-            trafficTextBox.Size = new Size(378, 326);
+            trafficTextBox.ReadOnly = true;
+            trafficTextBox.Size = new Size(402, 275);
             trafficTextBox.TabIndex = 5;
             trafficTextBox.Text = "";
             // 
             // hostTextBox
             // 
             hostTextBox.AutoSize = true;
-            hostTextBox.Location = new Point(12, 64);
+            hostTextBox.Location = new Point(507, 159);
             hostTextBox.Name = "hostTextBox";
-            hostTextBox.Size = new Size(42, 15);
+            hostTextBox.Size = new Size(53, 20);
             hostTextBox.TabIndex = 6;
             hostTextBox.Text = "Traffic:";
             // 
-            // textBox1
+            // usernameTextBox
             // 
-            textBox1.Location = new Point(444, 82);
-            textBox1.Name = "textBox1";
-            textBox1.Size = new Size(106, 23);
-            textBox1.TabIndex = 8;
+            usernameTextBox.Location = new Point(507, 109);
+            usernameTextBox.Margin = new Padding(3, 4, 3, 4);
+            usernameTextBox.Name = "usernameTextBox";
+            usernameTextBox.Size = new Size(121, 27);
+            usernameTextBox.TabIndex = 8;
             // 
             // nameLabel
             // 
             nameLabel.AutoSize = true;
-            nameLabel.Location = new Point(444, 64);
+            nameLabel.Location = new Point(507, 85);
             nameLabel.Name = "nameLabel";
-            nameLabel.Size = new Size(63, 15);
+            nameLabel.Size = new Size(78, 20);
             nameLabel.TabIndex = 7;
             nameLabel.Text = "Username:";
             // 
             // setUsernameButton
             // 
-            setUsernameButton.Location = new Point(556, 82);
+            setUsernameButton.Location = new Point(635, 109);
+            setUsernameButton.Margin = new Padding(3, 4, 3, 4);
             setUsernameButton.Name = "setUsernameButton";
-            setUsernameButton.Size = new Size(55, 23);
+            setUsernameButton.Size = new Size(63, 31);
             setUsernameButton.TabIndex = 10;
             setUsernameButton.Text = "Set";
             setUsernameButton.UseVisualStyleBackColor = true;
@@ -120,20 +127,21 @@
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(820, 463);
+            ClientSize = new Size(937, 617);
             Controls.Add(setUsernameButton);
-            Controls.Add(textBox1);
+            Controls.Add(usernameTextBox);
             Controls.Add(nameLabel);
             Controls.Add(hostTextBox);
             Controls.Add(trafficTextBox);
-            Controls.Add(clientTextBox);
+            Controls.Add(messageTextBox);
             Controls.Add(label1);
             Controls.Add(hostButton);
             Controls.Add(clientButton);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
-            Text = "Scribidio";
+            Text = " ";
             Load += Form1_Load;
             ResumeLayout(false);
             PerformLayout();
@@ -143,10 +151,10 @@
         private Button clientButton;
         private Button hostButton;
         private Label label1;
-        private TextBox clientTextBox;
+        private TextBox messageTextBox;
         private RichTextBox trafficTextBox;
         private Label hostTextBox;
-        private TextBox textBox1;
+        private TextBox usernameTextBox;
         private Label nameLabel;
         private Button setUsernameButton;
     }

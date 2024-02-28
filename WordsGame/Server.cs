@@ -35,7 +35,6 @@ namespace WordsGame
         {
             BroadcastMessage(sender as Worker, e.Message);
             
-
         }
 
         private void Worker_Disconnected(object sender, EventArgs e)
