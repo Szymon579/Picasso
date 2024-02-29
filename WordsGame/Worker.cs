@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 
 namespace WordsGame
 {
-    delegate void MessageEventHandler(object sender, MessageEventArgs e);
+    delegate void DataEventHandler(object sender, DataEventArgs e);
 
-    class MessageEventArgs : EventArgs
+    class DataEventArgs : EventArgs
     {
-        public string Message { get; private set; }
+        public byte[] data { get; private set; }
 
-        public MessageEventArgs(string message)
+        public DataEventArgs(byte[] data)
         {
-            this.Message = message;
+            this.data = data;
         }
     }
 
     class Worker
     {
-        public event MessageEventHandler MessageReceived;
+        public event DataEventHandler DataReceived;
         public event EventHandler Disconnected;
         private readonly TcpClient socket;
         private readonly Stream stream;
@@ -33,10 +33,10 @@ namespace WordsGame
             this.stream = socket.GetStream();
         }
 
-        public void Send(string message)
+        public void Send(byte[] data)
         {
-            byte[] buffer = Encoding.UTF8.GetBytes(message);
-            stream.Write(buffer, 0, buffer.Length);
+            //byte[] buffer = Encoding.UTF8.GetBytes(message);
+            stream.Write(data, 0, data.Length);
         }
 
         public void Start()
@@ -46,7 +46,7 @@ namespace WordsGame
 
         private void Run()
         {
-            byte[] buffer = new byte[2018];
+            byte[] buffer = new byte[Int32.MaxValue / 2];
             try
             {
                 while (true)
@@ -55,10 +55,14 @@ namespace WordsGame
                     if (receivedBytes < 1)
                         break;
                     string message = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
+                    
+                    byte[] bytes = new byte[receivedBytes];
+                    Array.Copy(buffer, bytes, receivedBytes);
+
                     if (Username == null)
                         Username = message;
                     else
-                        MessageReceived?.Invoke(this, new MessageEventArgs(message));
+                        DataReceived?.Invoke(this, new DataEventArgs(bytes));
                 }
             }
             catch (IOException) { }

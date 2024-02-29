@@ -37,14 +37,16 @@
             usernameTextBox = new TextBox();
             nameLabel = new Label();
             setUsernameButton = new Button();
+            pictureBox = new PictureBox();
+            labelPictureBox = new Label();
+            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             SuspendLayout();
             // 
             // clientButton
             // 
-            clientButton.Location = new Point(507, 16);
-            clientButton.Margin = new Padding(3, 4, 3, 4);
+            clientButton.Location = new Point(444, 12);
             clientButton.Name = "clientButton";
-            clientButton.Size = new Size(121, 45);
+            clientButton.Size = new Size(106, 34);
             clientButton.TabIndex = 1;
             clientButton.Text = "Client";
             clientButton.UseVisualStyleBackColor = true;
@@ -52,10 +54,9 @@
             // 
             // hostButton
             // 
-            hostButton.Location = new Point(14, 16);
-            hostButton.Margin = new Padding(3, 4, 3, 4);
+            hostButton.Location = new Point(12, 12);
             hostButton.Name = "hostButton";
-            hostButton.Size = new Size(121, 45);
+            hostButton.Size = new Size(106, 34);
             hostButton.TabIndex = 2;
             hostButton.Text = "Host";
             hostButton.UseVisualStyleBackColor = true;
@@ -64,72 +65,91 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(507, 476);
+            label1.Location = new Point(444, 357);
             label1.Name = "label1";
-            label1.Size = new Size(70, 20);
+            label1.Size = new Size(56, 15);
             label1.TabIndex = 3;
             label1.Text = "Message:";
             // 
             // messageTextBox
             // 
-            messageTextBox.Location = new Point(507, 500);
-            messageTextBox.Margin = new Padding(3, 4, 3, 4);
+            messageTextBox.Location = new Point(444, 375);
             messageTextBox.Name = "messageTextBox";
-            messageTextBox.Size = new Size(402, 27);
+            messageTextBox.Size = new Size(352, 23);
             messageTextBox.TabIndex = 4;
             // 
             // trafficTextBox
             // 
-            trafficTextBox.Location = new Point(507, 183);
-            trafficTextBox.Margin = new Padding(3, 4, 3, 4);
+            trafficTextBox.Location = new Point(444, 137);
             trafficTextBox.Name = "trafficTextBox";
             trafficTextBox.ReadOnly = true;
-            trafficTextBox.Size = new Size(402, 275);
+            trafficTextBox.Size = new Size(352, 207);
             trafficTextBox.TabIndex = 5;
             trafficTextBox.Text = "";
             // 
             // hostTextBox
             // 
             hostTextBox.AutoSize = true;
-            hostTextBox.Location = new Point(507, 159);
+            hostTextBox.Location = new Point(444, 119);
             hostTextBox.Name = "hostTextBox";
-            hostTextBox.Size = new Size(53, 20);
+            hostTextBox.Size = new Size(42, 15);
             hostTextBox.TabIndex = 6;
             hostTextBox.Text = "Traffic:";
             // 
             // usernameTextBox
             // 
-            usernameTextBox.Location = new Point(507, 109);
-            usernameTextBox.Margin = new Padding(3, 4, 3, 4);
+            usernameTextBox.Location = new Point(444, 82);
             usernameTextBox.Name = "usernameTextBox";
-            usernameTextBox.Size = new Size(121, 27);
+            usernameTextBox.Size = new Size(106, 23);
             usernameTextBox.TabIndex = 8;
             // 
             // nameLabel
             // 
             nameLabel.AutoSize = true;
-            nameLabel.Location = new Point(507, 85);
+            nameLabel.Location = new Point(444, 64);
             nameLabel.Name = "nameLabel";
-            nameLabel.Size = new Size(78, 20);
+            nameLabel.Size = new Size(63, 15);
             nameLabel.TabIndex = 7;
             nameLabel.Text = "Username:";
             // 
             // setUsernameButton
             // 
-            setUsernameButton.Location = new Point(635, 109);
-            setUsernameButton.Margin = new Padding(3, 4, 3, 4);
+            setUsernameButton.Location = new Point(556, 82);
             setUsernameButton.Name = "setUsernameButton";
-            setUsernameButton.Size = new Size(63, 31);
+            setUsernameButton.Size = new Size(55, 23);
             setUsernameButton.TabIndex = 10;
             setUsernameButton.Text = "Set";
             setUsernameButton.UseVisualStyleBackColor = true;
             setUsernameButton.Click += setUsernameButton_Click;
             // 
+            // pictureBox
+            // 
+            pictureBox.BackColor = SystemColors.ButtonHighlight;
+            pictureBox.Location = new Point(12, 82);
+            pictureBox.Name = "pictureBox";
+            pictureBox.Size = new Size(397, 316);
+            pictureBox.TabIndex = 11;
+            pictureBox.TabStop = false;
+            pictureBox.MouseDown += pictureBox_MouseDown;
+            pictureBox.MouseMove += pictureBox_MouseMove;
+            pictureBox.MouseUp += pictureBox_MouseUp;
+            // 
+            // labelPictureBox
+            // 
+            labelPictureBox.AutoSize = true;
+            labelPictureBox.Location = new Point(12, 64);
+            labelPictureBox.Name = "labelPictureBox";
+            labelPictureBox.Size = new Size(48, 15);
+            labelPictureBox.TabIndex = 12;
+            labelPictureBox.Text = "Canvas:";
+            // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(937, 617);
+            ClientSize = new Size(820, 463);
+            Controls.Add(labelPictureBox);
+            Controls.Add(pictureBox);
             Controls.Add(setUsernameButton);
             Controls.Add(usernameTextBox);
             Controls.Add(nameLabel);
@@ -139,10 +159,10 @@
             Controls.Add(label1);
             Controls.Add(hostButton);
             Controls.Add(clientButton);
-            Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
             Text = " ";
             Load += Form1_Load;
+            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -157,5 +177,7 @@
         private TextBox usernameTextBox;
         private Label nameLabel;
         private Button setUsernameButton;
+        private PictureBox pictureBox;
+        private Label labelPictureBox;
     }
 }

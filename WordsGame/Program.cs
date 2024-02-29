@@ -8,7 +8,7 @@ namespace WordsGame
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1());
 
-
+            Console.ReadLine();
         }
     }
 

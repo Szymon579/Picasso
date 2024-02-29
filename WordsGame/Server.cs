@@ -10,7 +10,7 @@ namespace WordsGame
 {
     class Server
     {
-        public event MessageEventHandler IncomingMessage;
+        public event DataEventHandler IncomingMessage;
         private TcpListener serverSocket;
         private List<Worker> workers = new List<Worker>();
 
@@ -31,9 +31,9 @@ namespace WordsGame
             }
         }
 
-        private void Worker_MessageReceived(object sender, MessageEventArgs e)
+        private void Worker_MessageReceived(object sender, DataEventArgs e)
         {
-            BroadcastMessage(sender as Worker, e.Message);
+            BroadcastData(sender as Worker, e.data);
             
         }
 
@@ -48,7 +48,7 @@ namespace WordsGame
             {
                 workers.Add(worker);
                 worker.Disconnected += Worker_Disconnected;
-                worker.MessageReceived += Worker_MessageReceived;
+                worker.DataReceived += Worker_MessageReceived;
             }
         }
 
@@ -57,19 +57,19 @@ namespace WordsGame
             lock (this)
             {
                 worker.Disconnected -= Worker_Disconnected;
-                worker.MessageReceived -= Worker_MessageReceived;
+                worker.DataReceived -= Worker_MessageReceived;
                 workers.Remove(worker);
                 worker.Close();
             }
         }
 
-        private void BroadcastMessage(Worker from, String message)
+        private void BroadcastData(Worker from, byte[] data)
         {
             lock (this)
             {
-                message = string.Format("{0}: {1}", from.Username, message);
+                //message = string.Format("{0}: {1}", from.Username, message);
                 
-                IncomingMessage?.Invoke(this, new MessageEventArgs(message));
+                IncomingMessage?.Invoke(this, new DataEventArgs(data));
                 
                 for (int i = 0; i < workers.Count; i++)
                 {
@@ -78,7 +78,7 @@ namespace WordsGame
                     {
                         try
                         {
-                            worker.Send(message);
+                            worker.Send(data);
                         }
                         catch (Exception)
                         {
