@@ -41,23 +41,6 @@ namespace WordsGame
 
         public void SendCanvasUpdate(Bitmap bmp)
         {
-            using(MemoryStream ms = new MemoryStream())
-            {
-                bmp.Save(ms, ImageFormat.Bmp);
-                
-                Byte[] bmpData = ms.ToArray();
-                Byte[] readyBytes = new Byte[bmpData.Length + 1];
-                readyBytes[0] = canvasCode;
-                bmpData.CopyTo(readyBytes, 1);
-
-                stream.Write(readyBytes, 0, readyBytes.Length);
-                Console.WriteLine("Canvas update sent, data length: " + bmpData.Length);
-            }
-
-        }
-
-        public void SendCanvasUpdate2(Bitmap bmp)
-        {
             using (MemoryStream ms = new MemoryStream())
             {
                 bmp.Save(ms, ImageFormat.Bmp);
@@ -81,12 +64,12 @@ namespace WordsGame
             
         }
 
-        public void startListenieng()
+        public void StartListeningForData()
         {       
-            new Thread(listenForMessage).Start();        
+            new Thread(ListenForData).Start();        
         }
 
-        public void listenForMessage()
+        public void ListenForData()
         {
             byte[] buffer = new byte[Int32.MaxValue / 2];
             try

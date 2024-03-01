@@ -18,7 +18,48 @@ namespace WordsGame
         private void Form1_Load(object sender, EventArgs e)
         {
             messageTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(SubmitMessage);
+            setUsernameButton.Enabled = false;
+        }
 
+        private async void hostButton_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("Setting up the server...");
+            hostButton.Enabled = false;
+            try
+            {
+                await Task.Run(() =>
+                {
+                    server = new Server(4000);
+                    server.WaitForConnection();
+                });
+            }
+            catch (IOException error)
+            {
+                Console.WriteLine(error.ToString());
+            }
+        }
+
+        private async void clientButton_Click(object sender, EventArgs e)
+        {
+            Console.WriteLine("Connecting as a client...");
+            clientButton.Enabled = false;
+            setUsernameButton.Enabled = true;
+            
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    client = new Client(4000);
+                    client.MessageReceived += messageReceived_Event;
+                    client.CanvasReceived += canvasReceived_Event;
+                    client.StartListeningForData();
+                });
+            }
+            catch (IOException error)
+            {
+                Console.WriteLine(error.ToString());
+            }
         }
 
         private void SubmitMessage(object sender, System.Windows.Forms.KeyPressEventArgs e)
@@ -52,50 +93,21 @@ namespace WordsGame
             byte[] bmpData = new byte[dataLength];
             Array.Copy(e.data, 4, bmpData, 0, dataLength);
 
-
+            string fileName = "received_image.bmp";
             // Save the BMP data to a file
-            File.WriteAllBytes("received_image.bmp", bmpData);
+            File.WriteAllBytes(fileName, bmpData);
 
+            //bmp = (Bitmap)Image.FromFile(fileName);
+
+            using (var ms = new MemoryStream(bmpData))
+            {
+                bmp = new Bitmap(ms);
+            }
+            pictureBox.Image = bmp;
             Console.WriteLine("BMP image received and saved.");
         }
 
-        private async void hostButton_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine("Setting up the server...");
-            hostButton.Enabled = false;
-            try
-            {
-                await Task.Run(() =>
-                {
-                    server = new Server(4000);
-                    server.WaitForConnection();
-                });
-            }
-            catch (IOException error)
-            {
-                Console.WriteLine(error.ToString());
-            }
-        }
-
-        private async void clientButton_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine("Connecting as a client...");
-            clientButton.Enabled = false;
-            try
-            {
-                await Task.Run(() =>
-                {
-                    client = new Client(4000);
-                    client.MessageReceived += messageReceived_Event;
-                    client.CanvasReceived += canvasReceived_Event;
-                    client.startListenieng();
-                });
-            }
-            catch (IOException error)
-            {
-                Console.WriteLine(error.ToString());
-            }
-        }
+        
 
         private void setUsernameButton_Click(object sender, EventArgs e)
         {
@@ -137,12 +149,11 @@ namespace WordsGame
         {
             Console.WriteLine("MouseUp");
             paint = false;
-            client.SendCanvasUpdate2(bmp);
+            client.SendCanvasUpdate(bmp);
         }
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
         {
-            //Console.WriteLine("MouseMove");
             if (paint)
             {
                 pCurrent = e.Location;
