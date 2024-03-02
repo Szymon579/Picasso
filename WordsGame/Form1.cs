@@ -45,7 +45,6 @@ namespace WordsGame
             clientButton.Enabled = false;
             setUsernameButton.Enabled = true;
             
-
             try
             {
                 await Task.Run(() =>
@@ -62,62 +61,41 @@ namespace WordsGame
             }
         }
 
-        private void SubmitMessage(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        private void SubmitMessage(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar == (char)Keys.Return)
             {
                 client.SendMessage(messageTextBox.Text);
-                //trafficTextBox.Font.Bold = true;
                 trafficTextBox.Text += messageTextBox.Text + "\n";
-                //trafficTextBox.Font.Bold = false;
                 messageTextBox.Text = string.Empty;
             }
         }
         private void messageReceived_Event(object sender, DataEventArgs e)
         {
-            Console.WriteLine("message received: ");
             string message = Encoding.UTF8.GetString(e.data);
             Console.WriteLine(message);
             trafficTextBox.Text += message + '\n';
+
+            Console.WriteLine("message received: ");
         }
 
         private void canvasReceived_Event(object sender, DataEventArgs e)
         {
-            Console.WriteLine("canvas received: ");
-            //TODO: handle drawing to the bmp
-
-            byte[] dataLengthBytes = new byte[4];
-            Array.Copy(e.data, 0, dataLengthBytes, 0, 4);
-            int dataLength = BitConverter.ToInt32(dataLengthBytes, 0);
-
-            byte[] bmpData = new byte[dataLength];
-            Array.Copy(e.data, 4, bmpData, 0, dataLength);
-
-            string fileName = "received_image.bmp";
-            // Save the BMP data to a file
-            File.WriteAllBytes(fileName, bmpData);
-
-            //bmp = (Bitmap)Image.FromFile(fileName);
-
-            using (var ms = new MemoryStream(bmpData))
-            {
-                bmp = new Bitmap(ms);
-            }
+            bmp = DataParser.MakeBitmapFromData(e.data);
+            graphics = Graphics.FromImage(bmp);
             pictureBox.Image = bmp;
-            Console.WriteLine("BMP image received and saved.");
-        }
 
-        
+            Console.WriteLine("canvas received: ");
+        }    
 
         private void setUsernameButton_Click(object sender, EventArgs e)
         {
             if (usernameTextBox.Text != string.Empty)
             {
                 client.SendMessage(usernameTextBox.Text);
+                client.SetUsername(usernameTextBox.Text);
             }
-
             setUsernameButton.Enabled = false;
-
         }
 
 
@@ -139,17 +117,19 @@ namespace WordsGame
 
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
-            Console.WriteLine("MouseDown");
             paint = true;
             pCurrent = e.Location;
             pPrevious = e.Location;
+
+            Console.WriteLine("MouseDown");
         }
 
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
-            Console.WriteLine("MouseUp");
             paint = false;
             client.SendCanvasUpdate(bmp);
+
+            Console.WriteLine("MouseUp");
         }
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)

@@ -54,13 +54,12 @@ namespace WordsGame
                     int receivedBytes = stream.Read(buffer, 0, buffer.Length);
                     if (receivedBytes < 1)
                         break;
-                    string message = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
                     
                     byte[] bytes = new byte[receivedBytes];
                     Array.Copy(buffer, bytes, receivedBytes);
 
                     if (Username == null)
-                        Username = message;
+                        Username = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
                     else
                         DataReceived?.Invoke(this, new DataEventArgs(bytes));
                 }

@@ -16,6 +16,7 @@ namespace WordsGame
         public event DataEventHandler CanvasReceived;
         private TcpClient client;
         private NetworkStream stream;
+        private string username;
 
         private byte messageCode = 100;
         private byte canvasCode = 200;
@@ -27,41 +28,22 @@ namespace WordsGame
             stream = client.GetStream();
         }
 
+        public void SetUsername(string username)
+        {
+            this.username = username;
+        }
+
         public void SendMessage(string message)
         {
-            Byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-            Byte[] readyBytes = new Byte[messageBytes.Length + 1];
-            readyBytes[0] = messageCode;
-            messageBytes.CopyTo(readyBytes, 1);
-            
-   
-            stream.Write(readyBytes, 0, readyBytes.Length);
-            //stream.Write(messageBytes, 0, messageBytes.Length);
+            message = username + ": " + message;
+            byte[] data = DataParser.MakeDataFromString(message);
+            stream.Write(data, 0, data.Length);
         }
 
         public void SendCanvasUpdate(Bitmap bmp)
         {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                bmp.Save(ms, ImageFormat.Bmp);
-
-                byte[] bmpData = ms.ToArray();
-
-                byte[] dataLength = BitConverter.GetBytes(bmpData.Length);
-
-                byte[] readyBytes = new byte[1 + dataLength.Length + bmpData.Length];
-                
-                readyBytes[0] = canvasCode;
-                Array.Copy(dataLength, 0, readyBytes, 1, dataLength.Length);
-                Array.Copy(bmpData, 0, readyBytes, 5, bmpData.Length);
-
-
-                stream.Write(readyBytes, 0, readyBytes.Length);
-
-                Console.WriteLine("BMP image sent successfully.");
-            }
-
-            
+            byte[] data = DataParser.MakeDataFromBitmap(bmp);
+            stream.Write(data, 0, data.Length);
         }
 
         public void StartListeningForData()
@@ -80,18 +62,15 @@ namespace WordsGame
                     if (receivedBytes < 1)
                         break;
 
-                    if (buffer[0] == messageCode)
+                    byte[] bytes = new byte[receivedBytes - 1];
+                    Array.Copy(buffer, 1, bytes, 0, receivedBytes - 1);
+
+                    if (buffer[0] == DataParser.messageDataCode)
                     {
-                        //string message = Encoding.UTF8.GetString(buffer, 1, receivedBytes - 1);
-                        byte[] bytes = new byte[receivedBytes - 1];
-                        Array.Copy(buffer, 1, bytes, 0, receivedBytes - 1);
                         MessageReceived?.Invoke(this, new DataEventArgs(bytes));
                     }
-                    else if (buffer[0] == canvasCode)
+                    else if (buffer[0] == DataParser.canvasDataCode)
                     {
-                        //string message = Encoding.UTF8.GetString(buffer, 1, receivedBytes - 1);
-                        byte[] bytes = new byte[receivedBytes - 1];
-                        Array.Copy(buffer, 1, bytes, 0, receivedBytes - 1);
                         CanvasReceived?.Invoke(this, new DataEventArgs(bytes));
                     }
 

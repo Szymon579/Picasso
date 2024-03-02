@@ -44,9 +44,10 @@
             // 
             // clientButton
             // 
-            clientButton.Location = new Point(444, 12);
+            clientButton.Location = new Point(414, 16);
+            clientButton.Margin = new Padding(3, 4, 3, 4);
             clientButton.Name = "clientButton";
-            clientButton.Size = new Size(106, 34);
+            clientButton.Size = new Size(121, 45);
             clientButton.TabIndex = 1;
             clientButton.Text = "Client";
             clientButton.UseVisualStyleBackColor = true;
@@ -54,9 +55,10 @@
             // 
             // hostButton
             // 
-            hostButton.Location = new Point(12, 12);
+            hostButton.Location = new Point(14, 16);
+            hostButton.Margin = new Padding(3, 4, 3, 4);
             hostButton.Name = "hostButton";
-            hostButton.Size = new Size(106, 34);
+            hostButton.Size = new Size(121, 45);
             hostButton.TabIndex = 2;
             hostButton.Text = "Host";
             hostButton.UseVisualStyleBackColor = true;
@@ -65,58 +67,62 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(444, 357);
+            label1.Location = new Point(414, 373);
             label1.Name = "label1";
-            label1.Size = new Size(56, 15);
+            label1.Size = new Size(70, 20);
             label1.TabIndex = 3;
             label1.Text = "Message:";
             // 
             // messageTextBox
             // 
-            messageTextBox.Location = new Point(444, 375);
+            messageTextBox.Location = new Point(414, 397);
+            messageTextBox.Margin = new Padding(3, 4, 3, 4);
             messageTextBox.Name = "messageTextBox";
-            messageTextBox.Size = new Size(352, 23);
+            messageTextBox.Size = new Size(337, 27);
             messageTextBox.TabIndex = 4;
             // 
             // trafficTextBox
             // 
-            trafficTextBox.Location = new Point(444, 137);
+            trafficTextBox.Location = new Point(414, 183);
+            trafficTextBox.Margin = new Padding(3, 4, 3, 4);
             trafficTextBox.Name = "trafficTextBox";
             trafficTextBox.ReadOnly = true;
-            trafficTextBox.Size = new Size(352, 207);
+            trafficTextBox.Size = new Size(337, 174);
             trafficTextBox.TabIndex = 5;
             trafficTextBox.Text = "";
             // 
             // hostTextBox
             // 
             hostTextBox.AutoSize = true;
-            hostTextBox.Location = new Point(444, 119);
+            hostTextBox.Location = new Point(414, 159);
             hostTextBox.Name = "hostTextBox";
-            hostTextBox.Size = new Size(42, 15);
+            hostTextBox.Size = new Size(53, 20);
             hostTextBox.TabIndex = 6;
             hostTextBox.Text = "Traffic:";
             // 
             // usernameTextBox
             // 
-            usernameTextBox.Location = new Point(444, 82);
+            usernameTextBox.Location = new Point(414, 109);
+            usernameTextBox.Margin = new Padding(3, 4, 3, 4);
             usernameTextBox.Name = "usernameTextBox";
-            usernameTextBox.Size = new Size(106, 23);
+            usernameTextBox.Size = new Size(121, 27);
             usernameTextBox.TabIndex = 8;
             // 
             // nameLabel
             // 
             nameLabel.AutoSize = true;
-            nameLabel.Location = new Point(444, 64);
+            nameLabel.Location = new Point(414, 85);
             nameLabel.Name = "nameLabel";
-            nameLabel.Size = new Size(63, 15);
+            nameLabel.Size = new Size(78, 20);
             nameLabel.TabIndex = 7;
             nameLabel.Text = "Username:";
             // 
             // setUsernameButton
             // 
-            setUsernameButton.Location = new Point(556, 82);
+            setUsernameButton.Location = new Point(542, 109);
+            setUsernameButton.Margin = new Padding(3, 4, 3, 4);
             setUsernameButton.Name = "setUsernameButton";
-            setUsernameButton.Size = new Size(55, 23);
+            setUsernameButton.Size = new Size(63, 31);
             setUsernameButton.TabIndex = 10;
             setUsernameButton.Text = "Set";
             setUsernameButton.UseVisualStyleBackColor = true;
@@ -125,9 +131,10 @@
             // pictureBox
             // 
             pictureBox.BackColor = SystemColors.ButtonHighlight;
-            pictureBox.Location = new Point(12, 82);
+            pictureBox.Location = new Point(14, 109);
+            pictureBox.Margin = new Padding(3, 4, 3, 4);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(397, 316);
+            pictureBox.Size = new Size(377, 315);
             pictureBox.TabIndex = 11;
             pictureBox.TabStop = false;
             pictureBox.MouseDown += pictureBox_MouseDown;
@@ -137,17 +144,17 @@
             // labelPictureBox
             // 
             labelPictureBox.AutoSize = true;
-            labelPictureBox.Location = new Point(12, 64);
+            labelPictureBox.Location = new Point(14, 85);
             labelPictureBox.Name = "labelPictureBox";
-            labelPictureBox.Size = new Size(48, 15);
+            labelPictureBox.Size = new Size(58, 20);
             labelPictureBox.TabIndex = 12;
             labelPictureBox.Text = "Canvas:";
             // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(820, 463);
+            ClientSize = new Size(764, 448);
             Controls.Add(labelPictureBox);
             Controls.Add(pictureBox);
             Controls.Add(setUsernameButton);
@@ -159,6 +166,7 @@
             Controls.Add(label1);
             Controls.Add(hostButton);
             Controls.Add(clientButton);
+            Margin = new Padding(3, 4, 3, 4);
             Name = "Form1";
             Text = " ";
             Load += Form1_Load;
