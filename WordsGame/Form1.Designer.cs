@@ -154,7 +154,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(764, 448);
+            ClientSize = new Size(764, 443);
             Controls.Add(labelPictureBox);
             Controls.Add(pictureBox);
             Controls.Add(setUsernameButton);
