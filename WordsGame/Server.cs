@@ -14,9 +14,11 @@ namespace WordsGame
         private TcpListener serverSocket;
         private List<Worker> workers = new List<Worker>();
 
-        public Server(int port)
+        public Server(string host, string port)
         {
-            serverSocket = new TcpListener(IPAddress.Parse("127.0.0.1"), port);
+            serverSocket = new TcpListener(IPAddress.Parse(host), int.Parse(port));
+            //serverSocket = new TcpListener(IPAddress.Parse("127.0.0.1"), port);
+
             serverSocket.Start();
         }
 

@@ -1,6 +1,8 @@
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
+using static System.Net.Mime.MediaTypeNames;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace WordsGame
 {
@@ -9,55 +11,47 @@ namespace WordsGame
         private Client client;
         private Server server;
 
+        Bitmap bmp;
+        Graphics graphics;
+        bool paint = false;
+        Point pCurrent, pPrevious;
+        Pen pen = new Pen(Color.Black, 2);
+
+        private List<Panel> panelList;
+
         public Form1()
         {
             InitializeComponent();
             initPainting();
+
+            panelList = new List<Panel>();
+            panelList.Add(gameplayPanel);
+            panelList.Add(menuPanel);
+            panelList.Add(createGamePanel);
+            panelList.Add(joinGamePanel);
+
+            ShowPanel(menuPanel);
         }
+
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
             messageTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(SubmitMessage);
-            setUsernameButton.Enabled = false;
         }
 
-        private async void hostButton_Click(object sender, EventArgs e)
+        private void ShowPanel(Panel panelToShow)
         {
-            Console.WriteLine("Setting up the server...");
-            hostButton.Enabled = false;
-            try
+            foreach (Panel panel in panelList)
             {
-                await Task.Run(() =>
+                if (panel.Equals(panelToShow))
                 {
-                    server = new Server(4000);
-                    server.WaitForConnection();
-                });
-            }
-            catch (IOException error)
-            {
-                Console.WriteLine(error.ToString());
-            }
-        }
-
-        private async void clientButton_Click(object sender, EventArgs e)
-        {
-            Console.WriteLine("Connecting as a client...");
-            clientButton.Enabled = false;
-            setUsernameButton.Enabled = true;
-            
-            try
-            {
-                await Task.Run(() =>
+                    panel.Visible = true;
+                }
+                else
                 {
-                    client = new Client(4000);
-                    client.MessageReceived += messageReceived_Event;
-                    client.CanvasReceived += canvasReceived_Event;
-                    client.StartListeningForData();
-                });
-            }
-            catch (IOException error)
-            {
-                Console.WriteLine(error.ToString());
+                    panel.Visible = false;
+                }
             }
         }
 
@@ -86,24 +80,7 @@ namespace WordsGame
             pictureBox.Image = bmp;
 
             Console.WriteLine("canvas received: ");
-        }    
-
-        private void setUsernameButton_Click(object sender, EventArgs e)
-        {
-            if (usernameTextBox.Text != string.Empty)
-            {
-                client.SendMessage(usernameTextBox.Text);
-                client.SetUsername(usernameTextBox.Text);
-            }
-            setUsernameButton.Enabled = false;
         }
-
-
-        Bitmap bmp;
-        Graphics graphics;
-        bool paint = false;
-        Point pCurrent, pPrevious;
-        Pen pen = new Pen(Color.Black, 2);
 
         void initPainting()
         {
@@ -142,5 +119,142 @@ namespace WordsGame
             }
             pictureBox.Refresh();
         }
+
+        private void createGameButton_Click(object sender, EventArgs e)
+        {
+            ShowPanel(createGamePanel);
+        }
+
+        private void joinGameButton_Click(object sender, EventArgs e)
+        {
+            ShowPanel(joinGamePanel);
+        }
+
+        private async void MakeServer(string host, string port)
+        {
+            try
+            {
+                await Task.Run(() =>
+                {
+                    server = new Server(host, port);
+                    server.WaitForConnection();
+                });
+            }
+            catch (IOException error)
+            {
+                Console.WriteLine(error.ToString());
+            }
+        }
+
+        private async void MakeClient(string host, string port, string username)
+        {
+            try
+            {
+                await Task.Run(() =>
+                {
+                    client = new Client(host, port);
+                    client.MessageReceived += messageReceived_Event;
+                    client.CanvasReceived += canvasReceived_Event;
+                    client.StartListeningForData();
+
+                    client.SendMessage(username);
+                    client.SetUsername(username);
+                });
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.ToString());
+                statusMessage("Connection failed");
+            }
+        }
+
+        private void hostButton_Click(object sender, EventArgs e)
+        {
+            string hostAndPort = hostServerTextBox.Text;
+            string username = hostUsernameTextBox.Text;
+
+            if (hostAndPort == string.Empty)
+            {
+                statusMessage("Game server cannot be empty!");
+                return;
+            }
+
+            if (username == string.Empty)
+            {
+                statusMessage("Username cannot be empty!");
+                return;
+            }
+
+            var parsed = ParseAddress(hostAndPort);
+            try
+            {
+                MakeServer(parsed.host, parsed.port);
+
+                MakeClient(parsed.host, parsed.port, username);
+
+
+            }
+            catch
+            {
+                statusMessage("Failed to create a game!");
+            }
+
+            ShowPanel(gameplayPanel);
+        }
+
+        private void connectButton_Click(object sender, EventArgs e)
+        {
+            string hostAndPort = gameServerTextBox.Text;
+            string username = usernameTextBox.Text;
+
+            if (hostAndPort == string.Empty)
+            {
+                statusMessage("Game server cannot be empty!");
+                return;
+            }
+
+            if (username == string.Empty)
+            {
+                statusMessage("Username cannot be empty!");
+                return;
+            }
+
+            var parsed = ParseAddress(hostAndPort);
+            try
+            {
+                MakeClient(parsed.host, parsed.port, username);
+            }
+            catch
+            {
+                statusMessage("Failed to Connect!");
+            }
+
+            ShowPanel(gameplayPanel);
+        }
+
+        private (string host, string port) ParseAddress(string hostAndPort)
+        {
+            int colonIndex = hostAndPort.IndexOf(':');
+            if (colonIndex == -1)
+            {
+                statusMessage("Invalid host:port format");
+                return (null, null);
+            }
+            string host = hostAndPort.Substring(0, colonIndex);
+            string port = hostAndPort.Substring(colonIndex + 1);
+
+            Console.WriteLine("Host: " + host);
+            Console.WriteLine("Port: " + port);
+
+            return (host, port);
+        }
+
+        private void statusMessage(string message)
+        {
+            Console.WriteLine(message);
+            statusLabel.Text = message;
+        }
+
+
     }
 }

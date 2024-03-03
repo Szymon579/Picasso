@@ -18,13 +18,11 @@ namespace WordsGame
         private NetworkStream stream;
         private string username;
 
-        private byte messageCode = 100;
-        private byte canvasCode = 200;
+        public Client(string host, string port)
+        {         
+            client = new TcpClient(host, int.Parse(port));
+            //client = new TcpClient("127.0.0.1", port);
 
-
-        public Client(int port)
-        {
-            client = new TcpClient("127.0.0.1", port);
             stream = client.GetStream();
         }
 

@@ -28,113 +28,78 @@
         /// </summary>
         private void InitializeComponent()
         {
-            clientButton = new Button();
-            hostButton = new Button();
             label1 = new Label();
             messageTextBox = new TextBox();
             trafficTextBox = new RichTextBox();
             hostTextBox = new Label();
-            usernameTextBox = new TextBox();
-            nameLabel = new Label();
-            setUsernameButton = new Button();
             pictureBox = new PictureBox();
             labelPictureBox = new Label();
+            gameplayPanel = new Panel();
+            menuPanel = new Panel();
+            createGameButton = new Button();
+            joinGameButton = new Button();
+            joinGamePanel = new Panel();
+            connectButton = new Button();
+            usernameTextBox = new TextBox();
+            gameServerTextBox = new TextBox();
+            label3 = new Label();
+            label2 = new Label();
+            statusStrip = new StatusStrip();
+            statusLabel = new ToolStripStatusLabel();
+            createGamePanel = new Panel();
+            hostButton = new Button();
+            hostUsernameTextBox = new TextBox();
+            hostServerTextBox = new TextBox();
+            label4 = new Label();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
+            gameplayPanel.SuspendLayout();
+            menuPanel.SuspendLayout();
+            joinGamePanel.SuspendLayout();
+            statusStrip.SuspendLayout();
+            createGamePanel.SuspendLayout();
             SuspendLayout();
-            // 
-            // clientButton
-            // 
-            clientButton.Location = new Point(414, 16);
-            clientButton.Margin = new Padding(3, 4, 3, 4);
-            clientButton.Name = "clientButton";
-            clientButton.Size = new Size(121, 45);
-            clientButton.TabIndex = 1;
-            clientButton.Text = "Client";
-            clientButton.UseVisualStyleBackColor = true;
-            clientButton.Click += clientButton_Click;
-            // 
-            // hostButton
-            // 
-            hostButton.Location = new Point(14, 16);
-            hostButton.Margin = new Padding(3, 4, 3, 4);
-            hostButton.Name = "hostButton";
-            hostButton.Size = new Size(121, 45);
-            hostButton.TabIndex = 2;
-            hostButton.Text = "Host";
-            hostButton.UseVisualStyleBackColor = true;
-            hostButton.Click += hostButton_Click;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(414, 373);
+            label1.Location = new Point(360, 275);
             label1.Name = "label1";
-            label1.Size = new Size(70, 20);
+            label1.Size = new Size(56, 15);
             label1.TabIndex = 3;
             label1.Text = "Message:";
             // 
             // messageTextBox
             // 
-            messageTextBox.Location = new Point(414, 397);
-            messageTextBox.Margin = new Padding(3, 4, 3, 4);
+            messageTextBox.Location = new Point(360, 293);
             messageTextBox.Name = "messageTextBox";
-            messageTextBox.Size = new Size(337, 27);
+            messageTextBox.Size = new Size(295, 23);
             messageTextBox.TabIndex = 4;
             // 
             // trafficTextBox
             // 
-            trafficTextBox.Location = new Point(414, 183);
-            trafficTextBox.Margin = new Padding(3, 4, 3, 4);
+            trafficTextBox.Location = new Point(360, 132);
             trafficTextBox.Name = "trafficTextBox";
             trafficTextBox.ReadOnly = true;
-            trafficTextBox.Size = new Size(337, 174);
+            trafficTextBox.Size = new Size(295, 132);
             trafficTextBox.TabIndex = 5;
             trafficTextBox.Text = "";
             // 
             // hostTextBox
             // 
             hostTextBox.AutoSize = true;
-            hostTextBox.Location = new Point(414, 159);
+            hostTextBox.Location = new Point(360, 114);
             hostTextBox.Name = "hostTextBox";
-            hostTextBox.Size = new Size(53, 20);
+            hostTextBox.Size = new Size(42, 15);
             hostTextBox.TabIndex = 6;
             hostTextBox.Text = "Traffic:";
-            // 
-            // usernameTextBox
-            // 
-            usernameTextBox.Location = new Point(414, 109);
-            usernameTextBox.Margin = new Padding(3, 4, 3, 4);
-            usernameTextBox.Name = "usernameTextBox";
-            usernameTextBox.Size = new Size(121, 27);
-            usernameTextBox.TabIndex = 8;
-            // 
-            // nameLabel
-            // 
-            nameLabel.AutoSize = true;
-            nameLabel.Location = new Point(414, 85);
-            nameLabel.Name = "nameLabel";
-            nameLabel.Size = new Size(78, 20);
-            nameLabel.TabIndex = 7;
-            nameLabel.Text = "Username:";
-            // 
-            // setUsernameButton
-            // 
-            setUsernameButton.Location = new Point(542, 109);
-            setUsernameButton.Margin = new Padding(3, 4, 3, 4);
-            setUsernameButton.Name = "setUsernameButton";
-            setUsernameButton.Size = new Size(63, 31);
-            setUsernameButton.TabIndex = 10;
-            setUsernameButton.Text = "Set";
-            setUsernameButton.UseVisualStyleBackColor = true;
-            setUsernameButton.Click += setUsernameButton_Click;
             // 
             // pictureBox
             // 
             pictureBox.BackColor = SystemColors.ButtonHighlight;
-            pictureBox.Location = new Point(14, 109);
-            pictureBox.Margin = new Padding(3, 4, 3, 4);
+            pictureBox.Location = new Point(10, 77);
             pictureBox.Name = "pictureBox";
-            pictureBox.Size = new Size(377, 315);
+            pictureBox.Size = new Size(330, 236);
             pictureBox.TabIndex = 11;
             pictureBox.TabStop = false;
             pictureBox.MouseDown += pictureBox_MouseDown;
@@ -144,48 +109,233 @@
             // labelPictureBox
             // 
             labelPictureBox.AutoSize = true;
-            labelPictureBox.Location = new Point(14, 85);
+            labelPictureBox.Location = new Point(10, 59);
             labelPictureBox.Name = "labelPictureBox";
-            labelPictureBox.Size = new Size(58, 20);
+            labelPictureBox.Size = new Size(48, 15);
             labelPictureBox.TabIndex = 12;
             labelPictureBox.Text = "Canvas:";
             // 
+            // gameplayPanel
+            // 
+            gameplayPanel.Controls.Add(labelPictureBox);
+            gameplayPanel.Controls.Add(pictureBox);
+            gameplayPanel.Controls.Add(label1);
+            gameplayPanel.Controls.Add(messageTextBox);
+            gameplayPanel.Controls.Add(trafficTextBox);
+            gameplayPanel.Controls.Add(hostTextBox);
+            gameplayPanel.Location = new Point(12, 12);
+            gameplayPanel.Name = "gameplayPanel";
+            gameplayPanel.Size = new Size(665, 329);
+            gameplayPanel.TabIndex = 13;
+            // 
+            // menuPanel
+            // 
+            menuPanel.Controls.Add(createGameButton);
+            menuPanel.Controls.Add(joinGameButton);
+            menuPanel.Location = new Point(12, 12);
+            menuPanel.Name = "menuPanel";
+            menuPanel.Size = new Size(665, 329);
+            menuPanel.TabIndex = 13;
+            // 
+            // createGameButton
+            // 
+            createGameButton.Location = new Point(254, 91);
+            createGameButton.Name = "createGameButton";
+            createGameButton.Size = new Size(162, 60);
+            createGameButton.TabIndex = 1;
+            createGameButton.Text = "Create game";
+            createGameButton.UseVisualStyleBackColor = true;
+            createGameButton.Click += createGameButton_Click;
+            // 
+            // joinGameButton
+            // 
+            joinGameButton.Location = new Point(254, 176);
+            joinGameButton.Name = "joinGameButton";
+            joinGameButton.Size = new Size(162, 60);
+            joinGameButton.TabIndex = 0;
+            joinGameButton.Text = "Join Game";
+            joinGameButton.UseVisualStyleBackColor = true;
+            joinGameButton.Click += joinGameButton_Click;
+            // 
+            // joinGamePanel
+            // 
+            joinGamePanel.Controls.Add(connectButton);
+            joinGamePanel.Controls.Add(usernameTextBox);
+            joinGamePanel.Controls.Add(gameServerTextBox);
+            joinGamePanel.Controls.Add(label3);
+            joinGamePanel.Controls.Add(label2);
+            joinGamePanel.Location = new Point(12, 12);
+            joinGamePanel.Name = "joinGamePanel";
+            joinGamePanel.Size = new Size(665, 329);
+            joinGamePanel.TabIndex = 14;
+            // 
+            // connectButton
+            // 
+            connectButton.Location = new Point(265, 198);
+            connectButton.Name = "connectButton";
+            connectButton.Size = new Size(159, 23);
+            connectButton.TabIndex = 4;
+            connectButton.Text = "Join";
+            connectButton.UseVisualStyleBackColor = true;
+            connectButton.Click += connectButton_Click;
+            // 
+            // usernameTextBox
+            // 
+            usernameTextBox.Location = new Point(265, 160);
+            usernameTextBox.Name = "usernameTextBox";
+            usernameTextBox.Size = new Size(159, 23);
+            usernameTextBox.TabIndex = 3;
+            usernameTextBox.Text = "Player1";
+            // 
+            // gameServerTextBox
+            // 
+            gameServerTextBox.Location = new Point(265, 109);
+            gameServerTextBox.Name = "gameServerTextBox";
+            gameServerTextBox.Size = new Size(159, 23);
+            gameServerTextBox.TabIndex = 2;
+            gameServerTextBox.Text = "192.168.93.1:4000";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(265, 142);
+            label3.Name = "label3";
+            label3.Size = new Size(63, 15);
+            label3.TabIndex = 1;
+            label3.Text = "Username:";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(265, 91);
+            label2.Name = "label2";
+            label2.Size = new Size(75, 15);
+            label2.TabIndex = 0;
+            label2.Text = "Game server:";
+            // 
+            // statusStrip
+            // 
+            statusStrip.Items.AddRange(new ToolStripItem[] { statusLabel });
+            statusStrip.Location = new Point(0, 355);
+            statusStrip.Name = "statusStrip";
+            statusStrip.Size = new Size(687, 22);
+            statusStrip.TabIndex = 15;
+            statusStrip.Text = "Test";
+            // 
+            // statusLabel
+            // 
+            statusLabel.DisplayStyle = ToolStripItemDisplayStyle.Text;
+            statusLabel.Name = "statusLabel";
+            statusLabel.Size = new Size(66, 17);
+            statusLabel.Text = "statusLabel";
+            // 
+            // createGamePanel
+            // 
+            createGamePanel.Controls.Add(hostButton);
+            createGamePanel.Controls.Add(hostUsernameTextBox);
+            createGamePanel.Controls.Add(hostServerTextBox);
+            createGamePanel.Controls.Add(label4);
+            createGamePanel.Controls.Add(label5);
+            createGamePanel.Location = new Point(12, 12);
+            createGamePanel.Name = "createGamePanel";
+            createGamePanel.Size = new Size(665, 329);
+            createGamePanel.TabIndex = 16;
+            // 
+            // hostButton
+            // 
+            hostButton.Location = new Point(265, 198);
+            hostButton.Name = "hostButton";
+            hostButton.Size = new Size(159, 23);
+            hostButton.TabIndex = 11;
+            hostButton.Text = "Create game";
+            hostButton.UseVisualStyleBackColor = true;
+            hostButton.Click += hostButton_Click;
+            // 
+            // hostUsernameTextBox
+            // 
+            hostUsernameTextBox.Location = new Point(265, 162);
+            hostUsernameTextBox.Name = "hostUsernameTextBox";
+            hostUsernameTextBox.Size = new Size(159, 23);
+            hostUsernameTextBox.TabIndex = 8;
+            hostUsernameTextBox.Text = "Host";
+            // 
+            // hostServerTextBox
+            // 
+            hostServerTextBox.Location = new Point(265, 111);
+            hostServerTextBox.Name = "hostServerTextBox";
+            hostServerTextBox.Size = new Size(159, 23);
+            hostServerTextBox.TabIndex = 7;
+            hostServerTextBox.Text = "192.168.93.1:4000";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(265, 144);
+            label4.Name = "label4";
+            label4.Size = new Size(63, 15);
+            label4.TabIndex = 6;
+            label4.Text = "Username:";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(265, 93);
+            label5.Name = "label5";
+            label5.Size = new Size(75, 15);
+            label5.TabIndex = 5;
+            label5.Text = "Game server:";
+            // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(764, 443);
-            Controls.Add(labelPictureBox);
-            Controls.Add(pictureBox);
-            Controls.Add(setUsernameButton);
-            Controls.Add(usernameTextBox);
-            Controls.Add(nameLabel);
-            Controls.Add(hostTextBox);
-            Controls.Add(trafficTextBox);
-            Controls.Add(messageTextBox);
-            Controls.Add(label1);
-            Controls.Add(hostButton);
-            Controls.Add(clientButton);
-            Margin = new Padding(3, 4, 3, 4);
+            ClientSize = new Size(687, 377);
+            Controls.Add(statusStrip);
+            Controls.Add(joinGamePanel);
+            Controls.Add(gameplayPanel);
+            Controls.Add(menuPanel);
+            Controls.Add(createGamePanel);
             Name = "Form1";
             Text = " ";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
+            gameplayPanel.ResumeLayout(false);
+            gameplayPanel.PerformLayout();
+            menuPanel.ResumeLayout(false);
+            joinGamePanel.ResumeLayout(false);
+            joinGamePanel.PerformLayout();
+            statusStrip.ResumeLayout(false);
+            statusStrip.PerformLayout();
+            createGamePanel.ResumeLayout(false);
+            createGamePanel.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-        private Button clientButton;
-        private Button hostButton;
         private Label label1;
         private TextBox messageTextBox;
         private RichTextBox trafficTextBox;
         private Label hostTextBox;
-        private TextBox usernameTextBox;
-        private Label nameLabel;
-        private Button setUsernameButton;
         private PictureBox pictureBox;
         private Label labelPictureBox;
+        private Panel gameplayPanel;
+        private Panel menuPanel;
+        private Button joinGameButton;
+        private Button createGameButton;
+        private Panel joinGamePanel;
+        private Button connectButton;
+        private TextBox usernameTextBox;
+        private TextBox gameServerTextBox;
+        private Label label3;
+        private Label label2;
+        private StatusStrip statusStrip;
+        private ToolStripStatusLabel statusLabel;
+        private Panel createGamePanel;
+        private TextBox hostUsernameTextBox;
+        private TextBox hostServerTextBox;
+        private Label label4;
+        private Label label5;
+        private Button hostButton;
     }
 }
