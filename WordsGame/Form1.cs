@@ -6,10 +6,11 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace WordsGame
 {
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
         private Client client;
         private Server server;
+        bool host;
 
         Bitmap bmp;
         Graphics graphics;
@@ -19,8 +20,10 @@ namespace WordsGame
 
         private List<Panel> panelList;
 
-        public Form1()
+        public MainForm()
         {
+            host = false;
+
             InitializeComponent();
             initPainting();
 
@@ -29,6 +32,7 @@ namespace WordsGame
             panelList.Add(menuPanel);
             panelList.Add(createGamePanel);
             panelList.Add(joinGamePanel);
+            panelList.Add(lobbyPanel);
 
             ShowPanel(menuPanel);
         }
@@ -70,7 +74,7 @@ namespace WordsGame
             Console.WriteLine(message);
             trafficTextBox.Text += message + '\n';
 
-            Console.WriteLine("message received: ");
+            SetStatusMessage("Message received");
         }
 
         private void canvasReceived_Event(object sender, DataEventArgs e)
@@ -79,7 +83,17 @@ namespace WordsGame
             graphics = Graphics.FromImage(bmp);
             pictureBox.Image = bmp;
 
-            Console.WriteLine("canvas received: ");
+            SetStatusMessage("Canvas received");
+        }
+        private void logicReceived_Event(object sender, DataEventArgs e)
+        {
+            if (host)
+            {
+                playersTextBox.Text += "Player connected" + '\n';
+            }
+
+
+            SetStatusMessage("Logic received");
         }
 
         void initPainting()
@@ -90,23 +104,21 @@ namespace WordsGame
             pictureBox.Image = bmp;
         }
 
-
-
         private void pictureBox_MouseDown(object sender, MouseEventArgs e)
         {
             paint = true;
             pCurrent = e.Location;
             pPrevious = e.Location;
 
-            Console.WriteLine("MouseDown");
+            SetStatusMessage("Mouse down");
         }
 
         private void pictureBox_MouseUp(object sender, MouseEventArgs e)
         {
             paint = false;
-            client.SendCanvasUpdate(bmp);
+            client.SendCanvas(bmp);
 
-            Console.WriteLine("MouseUp");
+            SetStatusMessage("Mouse up");
         }
 
         private void pictureBox_MouseMove(object sender, MouseEventArgs e)
@@ -122,6 +134,7 @@ namespace WordsGame
 
         private void createGameButton_Click(object sender, EventArgs e)
         {
+            host = true;
             ShowPanel(createGamePanel);
         }
 
@@ -155,16 +168,18 @@ namespace WordsGame
                     client = new Client(host, port);
                     client.MessageReceived += messageReceived_Event;
                     client.CanvasReceived += canvasReceived_Event;
+                    client.LogicReceived += logicReceived_Event;
                     client.StartListeningForData();
 
                     client.SendMessage(username);
                     client.SetUsername(username);
+                    //client.SendLogic(LogicController.connected);
                 });
             }
             catch (Exception error)
             {
                 Console.WriteLine(error.ToString());
-                statusMessage("Connection failed");
+                SetStatusMessage("Connection failed");
             }
         }
 
@@ -175,13 +190,13 @@ namespace WordsGame
 
             if (hostAndPort == string.Empty)
             {
-                statusMessage("Game server cannot be empty!");
+                SetStatusMessage("Game server cannot be empty!");
                 return;
             }
 
             if (username == string.Empty)
             {
-                statusMessage("Username cannot be empty!");
+                SetStatusMessage("Username cannot be empty!");
                 return;
             }
 
@@ -189,17 +204,15 @@ namespace WordsGame
             try
             {
                 MakeServer(parsed.host, parsed.port);
-
                 MakeClient(parsed.host, parsed.port, username);
-
-
+                ShowPanel(lobbyPanel);
             }
             catch
             {
-                statusMessage("Failed to create a game!");
+                SetStatusMessage("Failed to create a game!");
             }
 
-            ShowPanel(gameplayPanel);
+
         }
 
         private void connectButton_Click(object sender, EventArgs e)
@@ -209,13 +222,13 @@ namespace WordsGame
 
             if (hostAndPort == string.Empty)
             {
-                statusMessage("Game server cannot be empty!");
+                SetStatusMessage("Game server cannot be empty!");
                 return;
             }
 
             if (username == string.Empty)
             {
-                statusMessage("Username cannot be empty!");
+                SetStatusMessage("Username cannot be empty!");
                 return;
             }
 
@@ -223,13 +236,15 @@ namespace WordsGame
             try
             {
                 MakeClient(parsed.host, parsed.port, username);
+                ShowPanel(gameplayPanel);
+                client.SendLogic(LogicController.connected);
             }
             catch
             {
-                statusMessage("Failed to Connect!");
+                SetStatusMessage("Failed to Connect!");
             }
 
-            ShowPanel(gameplayPanel);
+
         }
 
         private (string host, string port) ParseAddress(string hostAndPort)
@@ -237,7 +252,7 @@ namespace WordsGame
             int colonIndex = hostAndPort.IndexOf(':');
             if (colonIndex == -1)
             {
-                statusMessage("Invalid host:port format");
+                SetStatusMessage("Invalid host:port format");
                 return (null, null);
             }
             string host = hostAndPort.Substring(0, colonIndex);
@@ -249,12 +264,15 @@ namespace WordsGame
             return (host, port);
         }
 
-        private void statusMessage(string message)
+        private void SetStatusMessage(string message)
         {
             Console.WriteLine(message);
             statusLabel.Text = message;
         }
 
-
+        private void startGameButton_Click(object sender, EventArgs e)
+        {
+            ShowPanel(gameplayPanel);
+        }
     }
 }

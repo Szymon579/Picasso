@@ -14,9 +14,13 @@ namespace WordsGame
     {
         public event DataEventHandler MessageReceived;
         public event DataEventHandler CanvasReceived;
+        public event DataEventHandler LogicReceived;
+
         private TcpClient client;
         private NetworkStream stream;
         private string username;
+
+
 
         public Client(string host, string port)
         {         
@@ -38,11 +42,23 @@ namespace WordsGame
             stream.Write(data, 0, data.Length);
         }
 
-        public void SendCanvasUpdate(Bitmap bmp)
+        public void SendCanvas(Bitmap bmp)
         {
             byte[] data = DataParser.MakeDataFromBitmap(bmp);
             stream.Write(data, 0, data.Length);
         }
+
+        public void SendLogic(byte logic)
+        {
+            byte[] data = DataParser.MakeDataFromLogic(logic);
+            stream.Write(data, 0, data.Length);
+        }
+
+        //public void SendCanvas(Bitmap bmp)
+        //{
+        //    byte[] data = DataParser.MakeDataFromBitmap(bmp);
+        //    stream.Write(data, 0, data.Length);
+        //}
 
         public void StartListeningForData()
         {       
@@ -70,6 +86,10 @@ namespace WordsGame
                     else if (buffer[0] == DataParser.canvasDataCode)
                     {
                         CanvasReceived?.Invoke(this, new DataEventArgs(bytes));
+                    }
+                    else if (buffer[0] == DataParser.logicDataCode)
+                    {
+                        LogicReceived?.Invoke(this, new DataEventArgs(bytes));
                     }
 
                 }

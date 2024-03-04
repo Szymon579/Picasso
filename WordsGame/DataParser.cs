@@ -12,8 +12,9 @@ namespace WordsGame
 {
     static class DataParser
     {
-        public static byte canvasDataCode  = 200;
+        public static byte canvasDataCode = 200;
         public static byte messageDataCode = 100;
+        public static byte logicDataCode = 255;
 
         public static byte[] MakeDataFromBitmap(Bitmap bitmap)
         {
@@ -39,7 +40,7 @@ namespace WordsGame
 
             int dataLength = BitConverter.ToInt32(dataLengthBytes, 0);
             byte[] bmpData = new byte[dataLength];
-                       
+
             Array.Copy(data, 4, bmpData, 0, dataLength);
 
             using (var ms = new MemoryStream(bmpData))
@@ -52,10 +53,25 @@ namespace WordsGame
         {
             byte[] messageBytes = Encoding.UTF8.GetBytes(str);
             byte[] readyBytes = new byte[messageBytes.Length + 1];
-            
+
             readyBytes[0] = messageDataCode;
             Array.Copy(messageBytes, 0, readyBytes, 1, messageBytes.Length);
             messageBytes.CopyTo(readyBytes, 1);
+
+            return readyBytes;
+        }
+
+        public static byte[] MakeLogicFromData(byte[] data)
+        {
+            return data;
+        }
+
+        public static byte[] MakeDataFromLogic(byte logic)
+        {
+            byte[] readyBytes = new byte[2];
+
+            readyBytes[0] = logicDataCode;
+            readyBytes[1] = logic;
 
             return readyBytes;
         }

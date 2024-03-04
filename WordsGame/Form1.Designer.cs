@@ -1,6 +1,6 @@
 ﻿namespace WordsGame
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -52,12 +52,17 @@
             hostServerTextBox = new TextBox();
             label4 = new Label();
             label5 = new Label();
+            lobbyPanel = new Panel();
+            label6 = new Label();
+            startGameButton = new Button();
+            playersTextBox = new RichTextBox();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             gameplayPanel.SuspendLayout();
             menuPanel.SuspendLayout();
             joinGamePanel.SuspendLayout();
             statusStrip.SuspendLayout();
             createGamePanel.SuspendLayout();
+            lobbyPanel.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -285,17 +290,55 @@
             label5.TabIndex = 5;
             label5.Text = "Game server:";
             // 
-            // Form1
+            // lobbyPanel
+            // 
+            lobbyPanel.Controls.Add(label6);
+            lobbyPanel.Controls.Add(startGameButton);
+            lobbyPanel.Controls.Add(playersTextBox);
+            lobbyPanel.Location = new Point(12, 12);
+            lobbyPanel.Name = "lobbyPanel";
+            lobbyPanel.Size = new Size(665, 329);
+            lobbyPanel.TabIndex = 17;
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(472, 41);
+            label6.Name = "label6";
+            label6.Size = new Size(47, 15);
+            label6.TabIndex = 2;
+            label6.Text = "Players:";
+            // 
+            // startGameButton
+            // 
+            startGameButton.Location = new Point(472, 242);
+            startGameButton.Name = "startGameButton";
+            startGameButton.Size = new Size(164, 32);
+            startGameButton.TabIndex = 1;
+            startGameButton.Text = "Start game";
+            startGameButton.UseVisualStyleBackColor = true;
+            startGameButton.Click += startGameButton_Click;
+            // 
+            // playersTextBox
+            // 
+            playersTextBox.Location = new Point(472, 59);
+            playersTextBox.Name = "playersTextBox";
+            playersTextBox.Size = new Size(164, 177);
+            playersTextBox.TabIndex = 0;
+            playersTextBox.Text = "";
+            // 
+            // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(687, 377);
+            Controls.Add(lobbyPanel);
             Controls.Add(statusStrip);
             Controls.Add(joinGamePanel);
             Controls.Add(gameplayPanel);
             Controls.Add(menuPanel);
             Controls.Add(createGamePanel);
-            Name = "Form1";
+            Name = "MainForm";
             Text = " ";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
@@ -308,6 +351,8 @@
             statusStrip.PerformLayout();
             createGamePanel.ResumeLayout(false);
             createGamePanel.PerformLayout();
+            lobbyPanel.ResumeLayout(false);
+            lobbyPanel.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -337,5 +382,9 @@
         private Label label4;
         private Label label5;
         private Button hostButton;
+        private Panel lobbyPanel;
+        private Label label6;
+        private Button startGameButton;
+        private RichTextBox playersTextBox;
     }
 }
