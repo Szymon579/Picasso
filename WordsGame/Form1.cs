@@ -35,6 +35,7 @@ namespace WordsGame
             panelList.Add(lobbyPanel);
 
             ShowPanel(menuPanel);
+            
         }
 
 
@@ -174,6 +175,12 @@ namespace WordsGame
                     client.SendMessage(username);
                     client.SetUsername(username);
                     //client.SendLogic(LogicController.connected);
+                    
+                    //pictureBoxHandler = new PictureBoxHandler(ref client, ref pictureBox);
+                    //pictureBoxHandler.InitPainting();
+                    //pictureBox.MouseDown += pictureBoxHandler.MouseDownEvent;
+                    //pictureBox.MouseUp += pictureBoxHandler.MouseUpEvent;
+                    //pictureBox.MouseMove += pictureBoxHandler.MouseMoveEvent;
                 });
             }
             catch (Exception error)
