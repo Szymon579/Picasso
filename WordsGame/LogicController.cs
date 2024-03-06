@@ -8,7 +8,9 @@ namespace WordsGame
 {
      class LogicController
     {
-        public static byte connected = 155;
-
+        public static byte playerConnected = 100;
+        public static byte setAsHost     = 101;
+        public static byte setAsArtist     = 102;
+        public static byte setAsGuesser    = 103;
     }
 }

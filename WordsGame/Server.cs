@@ -10,15 +10,14 @@ namespace WordsGame
 {
     class Server
     {
-        public event DataEventHandler IncomingMessage;
+        //public event DataEventHandler IncomingMessage;
         private TcpListener serverSocket;
         private List<Worker> workers = new List<Worker>();
+        private Worker hostWorker;
 
         public Server(string host, string port)
         {
             serverSocket = new TcpListener(IPAddress.Parse(host), int.Parse(port));
-            //serverSocket = new TcpListener(IPAddress.Parse("127.0.0.1"), port);
-
             serverSocket.Start();
         }
 
@@ -33,10 +32,9 @@ namespace WordsGame
             }
         }
 
-        private void Worker_MessageReceived(object sender, DataEventArgs e)
+        private void Worker_DataReceived(object sender, DataEventArgs e)
         {
-            BroadcastData(sender as Worker, e.data);
-            
+            RouteData(sender as Worker, e.data);           
         }
 
         private void Worker_Disconnected(object sender, EventArgs e)
@@ -50,7 +48,7 @@ namespace WordsGame
             {
                 workers.Add(worker);
                 worker.Disconnected += Worker_Disconnected;
-                worker.DataReceived += Worker_MessageReceived;
+                worker.DataReceived += Worker_DataReceived;
             }
         }
 
@@ -59,19 +57,25 @@ namespace WordsGame
             lock (this)
             {
                 worker.Disconnected -= Worker_Disconnected;
-                worker.DataReceived -= Worker_MessageReceived;
+                worker.DataReceived -= Worker_DataReceived;
                 workers.Remove(worker);
                 worker.Close();
             }
         }
 
-        private void BroadcastData(Worker from, byte[] data)
+        private void RouteData(Worker from, byte[] data)
         {
             lock (this)
             {
-                //message = string.Format("{0}: {1}", from.Username, message);
-                
-                IncomingMessage?.Invoke(this, new DataEventArgs(data));
+                //message = string.Format("{0}: {1}", from.Username, message);               
+                //IncomingMessage?.Invoke(this, new DataEventArgs(data));
+
+                if (data[0] == DataParser.logicDataCode)
+                {
+                    logicRouter(from, data);
+                    return;
+                }
+
                 
                 for (int i = 0; i < workers.Count; i++)
                 {
@@ -91,7 +95,37 @@ namespace WordsGame
                 }
             }
 
+        }
+
+        private void logicRouter(Worker from, byte[] data)
+        {
+            byte logicCode = data[1];
+
+            if(logicCode == LogicController.playerConnected)
+            {
+                from.Send(DataParser.MakeDataFromString("player conn"));
+            }
+            else if (logicCode == LogicController.setAsHost)
+            {
+                hostWorker = from;
+                Console.WriteLine("Worker set as host");
+            }
+            else if(logicCode == LogicController.setAsArtist)
+            {
+
+            }
+            else if (logicCode == LogicController.setAsGuesser)
+            {
+
+            }
+
+
+
+
 
         }
+
+
+
     }
 }

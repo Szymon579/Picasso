@@ -56,6 +56,8 @@
             label6 = new Label();
             startGameButton = new Button();
             playersTextBox = new RichTextBox();
+            roundsUpDown = new NumericUpDown();
+            label7 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             gameplayPanel.SuspendLayout();
             menuPanel.SuspendLayout();
@@ -63,6 +65,7 @@
             statusStrip.SuspendLayout();
             createGamePanel.SuspendLayout();
             lobbyPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)roundsUpDown).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -292,6 +295,8 @@
             // 
             // lobbyPanel
             // 
+            lobbyPanel.Controls.Add(label7);
+            lobbyPanel.Controls.Add(roundsUpDown);
             lobbyPanel.Controls.Add(label6);
             lobbyPanel.Controls.Add(startGameButton);
             lobbyPanel.Controls.Add(playersTextBox);
@@ -327,6 +332,25 @@
             playersTextBox.TabIndex = 0;
             playersTextBox.Text = "";
             // 
+            // roundsUpDown
+            // 
+            roundsUpDown.Location = new Point(383, 59);
+            roundsUpDown.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+            roundsUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            roundsUpDown.Name = "roundsUpDown";
+            roundsUpDown.Size = new Size(72, 23);
+            roundsUpDown.TabIndex = 3;
+            roundsUpDown.Value = new decimal(new int[] { 3, 0, 0, 0 });
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(383, 41);
+            label7.Name = "label7";
+            label7.Size = new Size(72, 15);
+            label7.TabIndex = 4;
+            label7.Text = "No. Rounds:";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -353,6 +377,7 @@
             createGamePanel.PerformLayout();
             lobbyPanel.ResumeLayout(false);
             lobbyPanel.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)roundsUpDown).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -386,5 +411,7 @@
         private Label label6;
         private Button startGameButton;
         private RichTextBox playersTextBox;
+        private NumericUpDown roundsUpDown;
+        private Label label7;
     }
 }

@@ -20,13 +20,9 @@ namespace WordsGame
         private NetworkStream stream;
         private string username;
 
-
-
         public Client(string host, string port)
         {         
             client = new TcpClient(host, int.Parse(port));
-            //client = new TcpClient("127.0.0.1", port);
-
             stream = client.GetStream();
         }
 
@@ -53,12 +49,6 @@ namespace WordsGame
             byte[] data = DataParser.MakeDataFromLogic(logic);
             stream.Write(data, 0, data.Length);
         }
-
-        //public void SendCanvas(Bitmap bmp)
-        //{
-        //    byte[] data = DataParser.MakeDataFromBitmap(bmp);
-        //    stream.Write(data, 0, data.Length);
-        //}
 
         public void StartListeningForData()
         {       
@@ -89,6 +79,7 @@ namespace WordsGame
                     }
                     else if (buffer[0] == DataParser.logicDataCode)
                     {
+                        Console.WriteLine("logic in buffer");
                         LogicReceived?.Invoke(this, new DataEventArgs(bytes));
                     }
 

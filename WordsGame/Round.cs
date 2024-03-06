@@ -18,6 +18,11 @@ namespace WordsGame
             this.artist = artist;
         }
 
+        public void chooseWord()
+        {
+            word = "Car";
+        }
+        
         public List<string> GetRandomWords(int count)
         {
             List<string> words = new List<string>(count);

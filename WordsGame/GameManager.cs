@@ -28,10 +28,13 @@ namespace WordsGame
             this.round = round;
         }
 
-        void StartRound()
+        void StartGame()
         {
             round = new Round(artist);
         }
+
+
+
 
         public void MakeScores()
         {
