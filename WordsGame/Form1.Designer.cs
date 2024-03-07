@@ -53,11 +53,15 @@
             label4 = new Label();
             label5 = new Label();
             lobbyPanel = new Panel();
+            label7 = new Label();
+            roundsUpDown = new NumericUpDown();
             label6 = new Label();
             startGameButton = new Button();
             playersTextBox = new RichTextBox();
-            roundsUpDown = new NumericUpDown();
-            label7 = new Label();
+            chooseWordPanel = new Panel();
+            word1Button = new Button();
+            word2Button = new Button();
+            word3Button = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             gameplayPanel.SuspendLayout();
             menuPanel.SuspendLayout();
@@ -66,6 +70,7 @@
             createGamePanel.SuspendLayout();
             lobbyPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)roundsUpDown).BeginInit();
+            chooseWordPanel.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -305,6 +310,25 @@
             lobbyPanel.Size = new Size(665, 329);
             lobbyPanel.TabIndex = 17;
             // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(383, 41);
+            label7.Name = "label7";
+            label7.Size = new Size(72, 15);
+            label7.TabIndex = 4;
+            label7.Text = "No. Rounds:";
+            // 
+            // roundsUpDown
+            // 
+            roundsUpDown.Location = new Point(383, 59);
+            roundsUpDown.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
+            roundsUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            roundsUpDown.Name = "roundsUpDown";
+            roundsUpDown.Size = new Size(72, 23);
+            roundsUpDown.TabIndex = 3;
+            roundsUpDown.Value = new decimal(new int[] { 3, 0, 0, 0 });
+            // 
             // label6
             // 
             label6.AutoSize = true;
@@ -332,30 +356,49 @@
             playersTextBox.TabIndex = 0;
             playersTextBox.Text = "";
             // 
-            // roundsUpDown
+            // chooseWordPanel
             // 
-            roundsUpDown.Location = new Point(383, 59);
-            roundsUpDown.Maximum = new decimal(new int[] { 10, 0, 0, 0 });
-            roundsUpDown.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            roundsUpDown.Name = "roundsUpDown";
-            roundsUpDown.Size = new Size(72, 23);
-            roundsUpDown.TabIndex = 3;
-            roundsUpDown.Value = new decimal(new int[] { 3, 0, 0, 0 });
+            chooseWordPanel.Controls.Add(word3Button);
+            chooseWordPanel.Controls.Add(word2Button);
+            chooseWordPanel.Controls.Add(word1Button);
+            chooseWordPanel.Location = new Point(12, 12);
+            chooseWordPanel.Name = "chooseWordPanel";
+            chooseWordPanel.Size = new Size(665, 329);
+            chooseWordPanel.TabIndex = 18;
             // 
-            // label7
+            // word1Button
             // 
-            label7.AutoSize = true;
-            label7.Location = new Point(383, 41);
-            label7.Name = "label7";
-            label7.Size = new Size(72, 15);
-            label7.TabIndex = 4;
-            label7.Text = "No. Rounds:";
+            word1Button.Location = new Point(163, 150);
+            word1Button.Name = "word1Button";
+            word1Button.Size = new Size(104, 41);
+            word1Button.TabIndex = 0;
+            word1Button.Text = "button1";
+            word1Button.UseVisualStyleBackColor = true;
+            // 
+            // word2Button
+            // 
+            word2Button.Location = new Point(273, 150);
+            word2Button.Name = "word2Button";
+            word2Button.Size = new Size(104, 41);
+            word2Button.TabIndex = 1;
+            word2Button.Text = "button2";
+            word2Button.UseVisualStyleBackColor = true;
+            // 
+            // word3Button
+            // 
+            word3Button.Location = new Point(383, 150);
+            word3Button.Name = "word3Button";
+            word3Button.Size = new Size(104, 41);
+            word3Button.TabIndex = 2;
+            word3Button.Text = "button3";
+            word3Button.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(687, 377);
+            Controls.Add(chooseWordPanel);
             Controls.Add(lobbyPanel);
             Controls.Add(statusStrip);
             Controls.Add(joinGamePanel);
@@ -378,6 +421,7 @@
             lobbyPanel.ResumeLayout(false);
             lobbyPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)roundsUpDown).EndInit();
+            chooseWordPanel.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -413,5 +457,9 @@
         private RichTextBox playersTextBox;
         private NumericUpDown roundsUpDown;
         private Label label7;
+        private Panel chooseWordPanel;
+        private Button word3Button;
+        private Button word2Button;
+        private Button word1Button;
     }
 }

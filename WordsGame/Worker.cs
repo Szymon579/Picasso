@@ -25,7 +25,7 @@ namespace WordsGame
         public event EventHandler Disconnected;
         private readonly TcpClient socket;
         private readonly Stream stream;
-        public string? Username { get; private set; } = null;
+        public string? username { get; private set; } = null;
 
         public Worker(TcpClient socket)
         {
@@ -58,8 +58,8 @@ namespace WordsGame
                     byte[] bytes = new byte[receivedBytes];
                     Array.Copy(buffer, bytes, receivedBytes);
 
-                    if (Username == null)
-                        Username = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
+                    if (username == null)
+                        username = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
                     else
                         DataReceived?.Invoke(this, new DataEventArgs(bytes));
                 }

@@ -14,7 +14,7 @@ namespace WordsGame
         private TcpListener serverSocket;
         private List<Worker> workers = new List<Worker>();
         private Worker hostWorker;
-
+        private GameManager gameManager;
         public Server(string host, string port)
         {
             serverSocket = new TcpListener(IPAddress.Parse(host), int.Parse(port));
@@ -117,6 +117,29 @@ namespace WordsGame
             else if (logicCode == LogicController.setAsGuesser)
             {
 
+            }
+            else if (logicCode == LogicController.gameStart)
+            {
+                gameManager = new GameManager(3, null, ref workers);
+                Worker artist = gameManager.chooseArtist();
+
+                if (artist != null)
+                {
+                    byte[] buf = new byte[2];
+                    buf[0] = DataParser.logicDataCode;
+                    buf[1] = LogicController.setAsArtist;
+                    artist.Send(buf);
+                }
+
+                byte[] bufer = new byte[2];
+                bufer[0] = DataParser.logicDataCode;
+                bufer[1] = LogicController.setAsGuesser;
+
+                List<Worker> guessers = gameManager.getGuessers();
+                for (int i = 0; i < guessers.Count; i++) 
+                {
+                    guessers[i].Send(bufer);
+                }
             }
 
 

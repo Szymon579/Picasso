@@ -10,17 +10,17 @@ namespace WordsGame
     {
         Worker artist;
         string word;
-        System.Timers.Timer timer;
+        //System.Timers.Timer timer;
 
 
-        public Round(Worker artist)
+        public Round()
         {
-            this.artist = artist;
+            
         }
 
         public void chooseWord()
         {
-            word = "Car";
+
         }
         
         public List<string> GetRandomWords(int count)

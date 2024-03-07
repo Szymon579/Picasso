@@ -34,6 +34,7 @@ namespace WordsGame
             panelList.Add(createGamePanel);
             panelList.Add(joinGamePanel);
             panelList.Add(lobbyPanel);
+            panelList.Add(chooseWordPanel);
 
             ShowPanel(menuPanel);
 
@@ -104,6 +105,7 @@ namespace WordsGame
                 }
             }
         }
+        
         private (string host, string port) ParseAddress(string hostAndPort)
         {
             int colonIndex = hostAndPort.IndexOf(':');
@@ -121,6 +123,11 @@ namespace WordsGame
             return (host, port);
         }
 
+        private void SetStatusMessage(string message)
+        {
+            Console.WriteLine(message);
+            statusLabel.Text = message;
+        }
 
 
         // ----------------------- MENU PANEL -----------------------
@@ -191,7 +198,6 @@ namespace WordsGame
             try
             {
                 MakeClient(parsed.host, parsed.port, username);
-
             }
             catch
             {
@@ -207,18 +213,12 @@ namespace WordsGame
         // ----------------------- LOBBY PANEL -----------------------
         private void startGameButton_Click(object sender, EventArgs e)
         {
-            ShowPanel(gameplayPanel);
-
-            if (host)
-                client.SendLogic(LogicController.setAsHost);
+            //ShowPanel(chooseWordPanel);    
+            client.SendLogic(LogicController.gameStart);
         }
 
-        private void SetStatusMessage(string message)
-        {
-            Console.WriteLine(message);
-            statusLabel.Text = message;
-        }
 
+        // ----------------------- LOBBY PANEL -----------------------
 
 
         // ----------------------- GAMEPLAY PANEL -----------------------
@@ -250,13 +250,26 @@ namespace WordsGame
         }
         private void logicReceived_Event(object sender, DataEventArgs e)
         {
-            if (true)
-            {
-                playersTextBox.Text += "Player connected" + '\n';
-            }
-            Console.WriteLine("logicReceived_Event");
-
             SetStatusMessage("Logic received");
+
+            //if (true)
+            //{
+            //    playersTextBox.Text += "Player connected" + '\n';
+            //}
+            //Console.WriteLine("logicReceived_Event");
+
+            if (e.data[0] == LogicController.setAsArtist)
+            {
+                SetStatusMessage("setAsArtist");
+                ShowPanel(gameplayPanel);
+            }
+            else if (e.data[0] == LogicController.setAsGuesser)
+            {
+                SetStatusMessage("setAsGuesser");
+                ShowPanel(gameplayPanel);
+            }
+
+            
         }
 
 

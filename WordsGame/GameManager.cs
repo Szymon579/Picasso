@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace WordsGame
 {
-    public class GameManager
+    class GameManager
     {
         int noRounds;
         Worker host;
         Worker artist;
         Round round;
+        List<Worker> players;
+        List<Worker> remainingArtists;
 
         GameManager() 
         {
@@ -19,20 +21,52 @@ namespace WordsGame
             host = null;
             artist = null;
             round = null;
+            players = null;
         }
-        GameManager(int noRounds, Worker host, Worker aritst, Round round)
+        public GameManager(int noRounds, Worker host, ref List<Worker> players)
         {
             this.noRounds = noRounds;
             this.host = host;
-            this.artist = aritst;
-            this.round = round;
+            this.players = players;
+            this.remainingArtists = players;
         }
 
-        void StartGame()
+        public Worker chooseArtist()
         {
-            round = new Round(artist);
+            if(remainingArtists.Count < 1) 
+            {
+                return null;
+            }
+
+            artist = remainingArtists[remainingArtists.Count - 1];
+            remainingArtists.Remove(artist);
+
+            return artist;
         }
 
+        public List<Worker> getGuessers() 
+        {
+            return remainingArtists;
+        }
+
+        public void StartGame()
+        {
+            round = new Round();
+            
+            //for (int i = 0; i < noRounds; i++)
+            //{
+            //    round = new Round();
+            //}
+
+            //FinishGame();
+        }
+
+        
+
+        public void FinishGame() 
+        {
+            //TODO: implement game end/restart
+        }
 
 
 
