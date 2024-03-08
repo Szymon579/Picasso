@@ -119,20 +119,20 @@ namespace WordsGame
             }
         }
 
-        //private void ShowPanel(Panel panelToShow)
-        //{
-        //    foreach (Panel panel in panelList)
-        //    {
-        //        if (panel.Equals(panelToShow))
-        //        {
-        //            panel.Visible = true;
-        //        }
-        //        else
-        //        {
-        //            panel.Visible = false;
-        //        }
-        //    }
-        //}
+        delegate void SetTextCallback(ref Button button, string text);
+        private void SetText(ref Button button, string text)
+        {
+
+            if (button.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(SetText);
+                this.Invoke(d, new object[] { text });
+            }
+            else
+            {
+                button.Text = text;
+            }
+        }
 
         private (string host, string port) ParseAddress(string hostAndPort)
         {
@@ -193,8 +193,6 @@ namespace WordsGame
             try
             {
                 MakeServer(parsed.host, parsed.port);
-                //MakeClient(parsed.host, parsed.port, username);
-                //ShowPanel(lobbyPanel);
             }
             catch
             {
@@ -302,7 +300,24 @@ namespace WordsGame
                 SetStatusMessage("setAsGuesser");
                 ShowPanel(gameplayPanel);
             }
-            //ShowPanel(gameplayPanel);
+            else if (e.data[0] == LogicController.emitWords)
+            {
+                SetStatusMessage("emitWords");
+                byte[] readyWords = new byte[e.data.Length - 1];
+                Array.Copy(e.data, 1, readyWords, 0, e.data.Length - 1);
+                
+                string allInOneWords = Encoding.UTF8.GetString(readyWords);
+                string[] wordList = allInOneWords.Split(' ');
+                word1Button.Text = wordList[0];
+                word2Button.Text = wordList[1];
+                word3Button.Text = wordList[2];
+                //SetText(ref word1Button, "TEST1");
+                //SetText(ref word2Button, "TEST2");
+                //SetText(ref word3Button, "TEST3");
+
+                Console.WriteLine("words emited");
+                //ShowPanel(gameplayPanel);
+            }
         }
 
 

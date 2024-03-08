@@ -12,7 +12,6 @@ namespace WordsGame
         string word;
         //System.Timers.Timer timer;
 
-
         public Round()
         {
             
@@ -25,12 +24,12 @@ namespace WordsGame
         
         public List<string> GetRandomWords(int count)
         {
-            List<string> words = new List<string>(count);
+            List<string> words = new List<string>();
 
+            words.Add("POL");
+            words.Add("ENG");
+            words.Add("FRA");
             //TODO: handle getting words from file
-            words[0] = "Policeman";
-            words[1] = "Orange";
-            words[2] = "School";
 
             return words;
         }

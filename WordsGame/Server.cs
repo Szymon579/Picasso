@@ -130,14 +130,25 @@ namespace WordsGame
             else if (logicCode == LogicController.gameStart)
             {
                 gameManager = new GameManager(3, null, ref workers);
+                gameManager.StartGame();
                 Worker artist = gameManager.chooseArtist();
 
                 if (artist != null)
                 {
+                    Console.WriteLine("1");
                     byte[] buf = new byte[2];
                     buf[0] = DataParser.logicDataCode;
                     buf[1] = LogicController.setAsArtist;
                     artist.Send(buf);
+                    Console.WriteLine("2");
+                    byte[] words = gameManager.getWords();
+                    byte[] readyBytes = new byte[words.Length + 1];
+                    Array.Copy(words, 0, readyBytes, 1, words.Length);
+                    readyBytes[0] = DataParser.logicDataCode;
+
+                    artist.Send(readyBytes);
+                    Console.WriteLine("3");
+                    Console.WriteLine("Words sent");
                 }
 
                 byte[] bufer = new byte[2];

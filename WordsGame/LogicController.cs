@@ -12,7 +12,7 @@ namespace WordsGame
         public static byte setAsHost       = 101;
         public static byte setAsArtist     = 102;
         public static byte setAsGuesser    = 103;
-        public static byte emitWords = 105;
-        public static byte gameStart = 106;
+        public static byte emitWords       = 105;
+        public static byte gameStart       = 106;
     }
 }

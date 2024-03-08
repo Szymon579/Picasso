@@ -39,9 +39,8 @@ namespace WordsGame
             }
 
             artist = remainingArtists[remainingArtists.Count - 1];
-            Console.WriteLine("remainign artisis: " + remainingArtists.Count);
             remainingArtists.Remove(artist);
-            Console.WriteLine("removed artisis: " + remainingArtists.Count);
+
             return artist;
         }
 
@@ -70,7 +69,26 @@ namespace WordsGame
             //FinishGame();
         }
 
-        
+        public byte[] getWords()
+        {
+            List<string> words = round.GetRandomWords(3);
+            string str = String.Join(" ", words);
+            Console.WriteLine("String: ");
+            Console.WriteLine(str);
+            //str = "SIEMA";
+            
+            byte[] bytes = DataParser.MakeDataFromString(str);
+            bytes[0] = LogicController.emitWords;
+
+            //byte[] readyBytes = new byte[bytes.Length + 1];
+            //Array.Copy(bytes, 0, readyBytes, 1, bytes.Length);
+
+            //readyBytes[0] = DataParser.logicDataCode;
+
+            Console.WriteLine("getWords");
+            return bytes;
+            
+        }
 
         public void FinishGame() 
         {
