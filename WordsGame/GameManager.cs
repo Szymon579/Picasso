@@ -72,30 +72,19 @@ namespace WordsGame
         public byte[] getWords()
         {
             List<string> words = round.GetRandomWords(3);
-            string str = String.Join(" ", words);
-            Console.WriteLine("String: ");
-            Console.WriteLine(str);
-            //str = "SIEMA";
-            
-            byte[] bytes = DataParser.MakeDataFromString(str);
-            bytes[0] = LogicController.emitWords;
-
-            //byte[] readyBytes = new byte[bytes.Length + 1];
-            //Array.Copy(bytes, 0, readyBytes, 1, bytes.Length);
-
-            //readyBytes[0] = DataParser.logicDataCode;
+            string str = string.Join(" ", words);
+              
+            byte[] bytes = DataTypeHandler.MakeDataFromString(str);
+            bytes[0] = LogicController.sendWordsToChoose;
 
             Console.WriteLine("getWords");
-            return bytes;
-            
+            return bytes;          
         }
 
         public void FinishGame() 
         {
             //TODO: implement game end/restart
         }
-
-
 
         public void MakeScores()
         {

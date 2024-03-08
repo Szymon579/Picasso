@@ -70,7 +70,7 @@ namespace WordsGame
                 //message = string.Format("{0}: {1}", from.Username, message);               
                 //IncomingMessage?.Invoke(this, new DataEventArgs(data));
 
-                if (data[0] == DataParser.logicDataCode)
+                if (data[0] == DataTypeHandler.logicDataType)
                 {
                     try
                     {
@@ -84,7 +84,7 @@ namespace WordsGame
                     return;
                 }
                 Console.WriteLine("data router exited");
-                return;
+                //return;
                 
                 for (int i = 0; i < workers.Count; i++)
                 {
@@ -112,7 +112,7 @@ namespace WordsGame
 
             if(logicCode == LogicController.playerConnected)
             {
-                from.Send(DataParser.MakeDataFromString("player conn"));
+                from.Send(DataTypeHandler.MakeDataFromString("player conn"));
             }
             else if (logicCode == LogicController.setAsHost)
             {
@@ -131,28 +131,27 @@ namespace WordsGame
             {
                 gameManager = new GameManager(3, null, ref workers);
                 gameManager.StartGame();
+                
                 Worker artist = gameManager.chooseArtist();
 
                 if (artist != null)
                 {
-                    Console.WriteLine("1");
                     byte[] buf = new byte[2];
-                    buf[0] = DataParser.logicDataCode;
+                    buf[0] = DataTypeHandler.logicDataType;
                     buf[1] = LogicController.setAsArtist;
                     artist.Send(buf);
-                    Console.WriteLine("2");
+
+
                     byte[] words = gameManager.getWords();
                     byte[] readyBytes = new byte[words.Length + 1];
                     Array.Copy(words, 0, readyBytes, 1, words.Length);
-                    readyBytes[0] = DataParser.logicDataCode;
+                    readyBytes[0] = DataTypeHandler.logicDataType;
 
                     artist.Send(readyBytes);
-                    Console.WriteLine("3");
-                    Console.WriteLine("Words sent");
                 }
 
                 byte[] bufer = new byte[2];
-                bufer[0] = DataParser.logicDataCode;
+                bufer[0] = DataTypeHandler.logicDataType;
                 bufer[1] = LogicController.setAsGuesser;
 
                 List<Worker> guessers = gameManager.getGuessers();
@@ -162,6 +161,10 @@ namespace WordsGame
                     Console.WriteLine("Set as guesser");
                 }
 
+            }
+            else if (logicCode == LogicController.sendChoosenWord)
+            {
+                //TODO: send _ _ _ _ _ (letters count) to guessers
             }
 
         }

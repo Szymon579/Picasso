@@ -34,19 +34,24 @@ namespace WordsGame
         public void SendMessage(string message)
         {
             message = username + ": " + message;
-            byte[] data = DataParser.MakeDataFromString(message);
+            byte[] data = DataTypeHandler.MakeDataFromString(message);
             stream.Write(data, 0, data.Length);
         }
 
         public void SendCanvas(Bitmap bmp)
         {
-            byte[] data = DataParser.MakeDataFromBitmap(bmp);
+            byte[] data = DataTypeHandler.MakeDataFromBitmap(bmp);
             stream.Write(data, 0, data.Length);
         }
 
         public void SendLogic(byte logic)
         {
-            byte[] data = DataParser.MakeDataFromLogic(logic);
+            byte[] data = DataTypeHandler.MakeDataFromLogic(logic);
+            stream.Write(data, 0, data.Length);
+        }
+        public void SendLogic(byte logic, string message)
+        {
+            byte[] data = DataTypeHandler.MakeDataFromLogic(logic, message);
             stream.Write(data, 0, data.Length);
         }
 
@@ -69,15 +74,15 @@ namespace WordsGame
                     byte[] bytes = new byte[receivedBytes - 1];
                     Array.Copy(buffer, 1, bytes, 0, receivedBytes - 1);
 
-                    if (buffer[0] == DataParser.messageDataCode)
+                    if (buffer[0] == DataTypeHandler.messageDataType)
                     {
                         MessageReceived?.Invoke(this, new DataEventArgs(bytes));
                     }
-                    else if (buffer[0] == DataParser.canvasDataCode)
+                    else if (buffer[0] == DataTypeHandler.canvasDataType)
                     {
                         CanvasReceived?.Invoke(this, new DataEventArgs(bytes));
                     }
-                    else if (buffer[0] == DataParser.logicDataCode)
+                    else if (buffer[0] == DataTypeHandler.logicDataType)
                     {
                         LogicReceived?.Invoke(this, new DataEventArgs(bytes));
                     }

@@ -36,9 +36,10 @@ namespace WordsGame
             panelList.Add(joinGamePanel);
             panelList.Add(lobbyPanel);
             panelList.Add(chooseWordPanel);
+            panelList.Add(artistPanel);
 
             ShowPanel(menuPanel);
-
+            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -96,13 +97,13 @@ namespace WordsGame
 
         private void ShowPanel(Panel panelToShow)
         {
-            
+
             foreach (Panel panel in panelList)
             {
                 if (panel.InvokeRequired)
                 {
                     ShowPanelCallback call = new ShowPanelCallback(ShowPanel);
-                    panel.Invoke(call, new object[] {panelToShow});
+                    panel.Invoke(call, new object[] { panelToShow });
                 }
                 else
                 {
@@ -115,7 +116,7 @@ namespace WordsGame
                         panel.Visible = false;
                     }
                 }
-                                
+
             }
         }
 
@@ -241,7 +242,7 @@ namespace WordsGame
                 SetStatusMessage("Failed to Connect!");
                 return;
             }
-            
+
             ShowPanel(lobbyPanel);
             client.SendLogic(LogicController.playerConnected);
         }
@@ -280,7 +281,7 @@ namespace WordsGame
 
         private void canvasReceived_Event(object sender, DataEventArgs e)
         {
-            bmp = DataParser.MakeBitmapFromData(e.data);
+            bmp = DataTypeHandler.MakeBitmapFromData(e.data);
             graphics = Graphics.FromImage(bmp);
             pictureBox.Image = bmp;
 
@@ -290,43 +291,49 @@ namespace WordsGame
         {
             SetStatusMessage("Logic received");
 
-            if (e.data[0] == LogicController.setAsArtist)
+            byte logicCode = e.data[0];
+
+            if (logicCode == LogicController.setAsArtist)
             {
                 SetStatusMessage("setAsArtist");
                 ShowPanel(chooseWordPanel);
             }
-            else if (e.data[0] == LogicController.setAsGuesser)
+            else if (logicCode == LogicController.setAsGuesser)
             {
                 SetStatusMessage("setAsGuesser");
                 ShowPanel(gameplayPanel);
+                pictureBox.Enabled = false;
             }
-            else if (e.data[0] == LogicController.emitWords)
+            else if (logicCode == LogicController.sendWordsToChoose)
             {
-                SetStatusMessage("emitWords");
-                byte[] readyWords = new byte[e.data.Length - 1];
-                Array.Copy(e.data, 1, readyWords, 0, e.data.Length - 1);
-                
-                string allInOneWords = Encoding.UTF8.GetString(readyWords);
-                string[] wordList = allInOneWords.Split(' ');
-                word1Button.Text = wordList[0];
-                word2Button.Text = wordList[1];
-                word3Button.Text = wordList[2];
-                //SetText(ref word1Button, "TEST1");
-                //SetText(ref word2Button, "TEST2");
-                //SetText(ref word3Button, "TEST3");
+                SetStatusMessage("Choose word");
 
-                Console.WriteLine("words emited");
-                //ShowPanel(gameplayPanel);
+                var words = DataTypeHandler.MakeWordsFromData(e.data);
+                word1Button.Text = words.Item1;
+                word2Button.Text = words.Item2;
+                word3Button.Text = words.Item3;
             }
         }
 
 
+        // ----------------------- CHOOSE WORD PANEL -----------------------
+        private void word1Button_Click(object sender, EventArgs e)
+        {
+            client.SendLogic(LogicController.sendChoosenWord, word1Button.Text);
+            ShowPanel(gameplayPanel);
+        }
 
+        private void word2Button_Click(object sender, EventArgs e)
+        {
+            client.SendLogic(LogicController.sendChoosenWord, word2Button.Text);
+            ShowPanel(gameplayPanel);
+        }
 
-
-
-
-
+        private void word3Button_Click(object sender, EventArgs e)
+        {
+            client.SendLogic(LogicController.sendChoosenWord, word3Button.Text);
+            ShowPanel(gameplayPanel);
+        }
 
 
 
@@ -369,5 +376,7 @@ namespace WordsGame
             }
             pictureBox.Refresh();
         }
+
+
     }
 }

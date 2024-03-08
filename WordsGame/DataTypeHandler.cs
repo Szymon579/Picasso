@@ -10,11 +10,11 @@ using System.Windows.Forms;
 
 namespace WordsGame
 {
-    static class DataParser
+    static class DataTypeHandler
     {
-        public static byte canvasDataCode = 200;
-        public static byte messageDataCode = 100;
-        public static byte logicDataCode = 255;
+        public static byte canvasDataType = 200;
+        public static byte messageDataType = 100;
+        public static byte logicDataType = 255;
 
         public static byte[] MakeDataFromBitmap(Bitmap bitmap)
         {
@@ -25,7 +25,7 @@ namespace WordsGame
                 byte[] dataLength = BitConverter.GetBytes(bitmapData.Length);
                 byte[] readyBytes = new byte[1 + dataLength.Length + bitmapData.Length];
 
-                readyBytes[0] = canvasDataCode;
+                readyBytes[0] = canvasDataType;
                 Array.Copy(dataLength, 0, readyBytes, 1, dataLength.Length);
                 Array.Copy(bitmapData, 0, readyBytes, 5, bitmapData.Length);
 
@@ -54,7 +54,7 @@ namespace WordsGame
             byte[] messageBytes = Encoding.UTF8.GetBytes(str);
             byte[] readyBytes = new byte[messageBytes.Length + 1];
 
-            readyBytes[0] = messageDataCode;
+            readyBytes[0] = messageDataType;
             Array.Copy(messageBytes, 0, readyBytes, 1, messageBytes.Length);
             messageBytes.CopyTo(readyBytes, 1);
 
@@ -66,16 +66,38 @@ namespace WordsGame
             return data;
         }
 
-        public static byte[] MakeDataFromLogic(byte logic)
+        public static byte[] MakeDataFromLogic(byte logicCode)
         {
             byte[] readyBytes = new byte[2];
 
-            readyBytes[0] = logicDataCode;
-            readyBytes[1] = logic;
+            readyBytes[0] = logicDataType;
+            readyBytes[1] = logicCode;
 
             return readyBytes;
         }
 
+        public static byte[] MakeDataFromLogic(byte logicCode, string str)
+        {
+            byte[] stringBytes = Encoding.UTF8.GetBytes(str);      
+            byte[] readyBytes = new byte[stringBytes.Length + 2];
+
+            readyBytes[0] = logicDataType;
+            readyBytes[1] = logicCode;
+            Array.Copy(stringBytes, 0, readyBytes, 2, stringBytes.Length);
+
+            return readyBytes;
+        }
+
+        public static (string, string, string) MakeWordsFromData(byte[] data)
+        {
+            byte[] readyWords = new byte[data.Length - 1];
+            Array.Copy(data, 1, readyWords, 0, data.Length - 1);
+
+            string allInOneWords = Encoding.UTF8.GetString(readyWords);
+            string[] wordList = allInOneWords.Split(' ');
+
+            return (wordList[0], wordList[1], wordList[2]);
+        }
 
     }
 }

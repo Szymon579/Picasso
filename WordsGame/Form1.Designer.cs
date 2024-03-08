@@ -59,9 +59,11 @@
             startGameButton = new Button();
             playersTextBox = new RichTextBox();
             chooseWordPanel = new Panel();
-            word1Button = new Button();
-            word2Button = new Button();
             word3Button = new Button();
+            word2Button = new Button();
+            word1Button = new Button();
+            artistPanel = new Panel();
+            wordToDrawLabel = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             gameplayPanel.SuspendLayout();
             menuPanel.SuspendLayout();
@@ -71,6 +73,7 @@
             lobbyPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)roundsUpDown).BeginInit();
             chooseWordPanel.SuspendLayout();
+            artistPanel.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -366,14 +369,15 @@
             chooseWordPanel.Size = new Size(665, 329);
             chooseWordPanel.TabIndex = 18;
             // 
-            // word1Button
+            // word3Button
             // 
-            word1Button.Location = new Point(163, 150);
-            word1Button.Name = "word1Button";
-            word1Button.Size = new Size(104, 41);
-            word1Button.TabIndex = 0;
-            word1Button.Text = "button1";
-            word1Button.UseVisualStyleBackColor = true;
+            word3Button.Location = new Point(383, 150);
+            word3Button.Name = "word3Button";
+            word3Button.Size = new Size(104, 41);
+            word3Button.TabIndex = 2;
+            word3Button.Text = "word_3";
+            word3Button.UseVisualStyleBackColor = true;
+            word3Button.Click += word3Button_Click;
             // 
             // word2Button
             // 
@@ -381,30 +385,50 @@
             word2Button.Name = "word2Button";
             word2Button.Size = new Size(104, 41);
             word2Button.TabIndex = 1;
-            word2Button.Text = "button2";
+            word2Button.Text = "word_2";
             word2Button.UseVisualStyleBackColor = true;
+            word2Button.Click += word2Button_Click;
             // 
-            // word3Button
+            // word1Button
             // 
-            word3Button.Location = new Point(383, 150);
-            word3Button.Name = "word3Button";
-            word3Button.Size = new Size(104, 41);
-            word3Button.TabIndex = 2;
-            word3Button.Text = "button3";
-            word3Button.UseVisualStyleBackColor = true;
+            word1Button.Location = new Point(163, 150);
+            word1Button.Name = "word1Button";
+            word1Button.Size = new Size(104, 41);
+            word1Button.TabIndex = 0;
+            word1Button.Text = "word_1";
+            word1Button.UseVisualStyleBackColor = true;
+            word1Button.Click += word1Button_Click;
+            // 
+            // artistPanel
+            // 
+            artistPanel.Controls.Add(wordToDrawLabel);
+            artistPanel.Location = new Point(12, 12);
+            artistPanel.Name = "artistPanel";
+            artistPanel.Size = new Size(665, 329);
+            artistPanel.TabIndex = 19;
+            // 
+            // wordToDrawLabel
+            // 
+            wordToDrawLabel.AutoSize = true;
+            wordToDrawLabel.Location = new Point(300, 17);
+            wordToDrawLabel.Name = "wordToDrawLabel";
+            wordToDrawLabel.Size = new Size(77, 15);
+            wordToDrawLabel.TabIndex = 0;
+            wordToDrawLabel.Text = "word to draw";
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(687, 377);
-            Controls.Add(chooseWordPanel);
-            Controls.Add(lobbyPanel);
             Controls.Add(statusStrip);
-            Controls.Add(joinGamePanel);
             Controls.Add(gameplayPanel);
             Controls.Add(menuPanel);
             Controls.Add(createGamePanel);
+            Controls.Add(artistPanel);
+            Controls.Add(chooseWordPanel);
+            Controls.Add(lobbyPanel);
+            Controls.Add(joinGamePanel);
             Name = "MainForm";
             Text = " ";
             Load += Form1_Load;
@@ -422,6 +446,8 @@
             lobbyPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)roundsUpDown).EndInit();
             chooseWordPanel.ResumeLayout(false);
+            artistPanel.ResumeLayout(false);
+            artistPanel.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -461,5 +487,7 @@
         private Button word3Button;
         private Button word2Button;
         private Button word1Button;
+        private Panel artistPanel;
+        private Label wordToDrawLabel;
     }
 }
