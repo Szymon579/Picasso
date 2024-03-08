@@ -79,7 +79,6 @@ namespace WordsGame
                     }
                     else if (buffer[0] == DataParser.logicDataCode)
                     {
-                        Console.WriteLine("logic in buffer");
                         LogicReceived?.Invoke(this, new DataEventArgs(bytes));
                     }
 

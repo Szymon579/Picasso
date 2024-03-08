@@ -39,13 +39,22 @@ namespace WordsGame
             }
 
             artist = remainingArtists[remainingArtists.Count - 1];
+            Console.WriteLine("remainign artisis: " + remainingArtists.Count);
             remainingArtists.Remove(artist);
-
+            Console.WriteLine("removed artisis: " + remainingArtists.Count);
             return artist;
         }
 
         public List<Worker> getGuessers() 
         {
+            //List<Worker> guessers = new List<Worker>();
+            //foreach(Worker worker in players) 
+            //{ 
+            //    if(!artist.Equals(worker)) 
+            //        guessers.Add(worker);
+            //}
+            //return guessers;
+
             return remainingArtists;
         }
 

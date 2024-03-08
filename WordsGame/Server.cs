@@ -72,10 +72,19 @@ namespace WordsGame
 
                 if (data[0] == DataParser.logicDataCode)
                 {
-                    logicRouter(from, data);
+                    try
+                    {
+                        logicRouter(from, data);
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine(ex.ToString());
+                    }
+                    
                     return;
                 }
-
+                Console.WriteLine("data router exited");
+                return;
                 
                 for (int i = 0; i < workers.Count; i++)
                 {
@@ -136,15 +145,13 @@ namespace WordsGame
                 bufer[1] = LogicController.setAsGuesser;
 
                 List<Worker> guessers = gameManager.getGuessers();
-                for (int i = 0; i < guessers.Count; i++) 
+                for (int i = 0; i < guessers.Count; i++)
                 {
                     guessers[i].Send(bufer);
+                    Console.WriteLine("Set as guesser");
                 }
+
             }
-
-
-
-
 
         }
 

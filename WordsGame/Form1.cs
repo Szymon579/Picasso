@@ -1,3 +1,4 @@
+using System.Dynamic;
 using System.IO;
 using System.Text;
 using System.Xml.Serialization;
@@ -91,21 +92,48 @@ namespace WordsGame
             }
         }
 
+        delegate void ShowPanelCallback(Panel panelToShow);
+
         private void ShowPanel(Panel panelToShow)
         {
+            
             foreach (Panel panel in panelList)
             {
-                if (panel.Equals(panelToShow))
+                if (panel.InvokeRequired)
                 {
-                    panel.Visible = true;
+                    ShowPanelCallback call = new ShowPanelCallback(ShowPanel);
+                    panel.Invoke(call, new object[] {panelToShow});
                 }
                 else
                 {
-                    panel.Visible = false;
+                    if (panel.Equals(panelToShow))
+                    {
+                        panel.Visible = true;
+                    }
+                    else
+                    {
+                        panel.Visible = false;
+                    }
                 }
+                                
             }
         }
-        
+
+        //private void ShowPanel(Panel panelToShow)
+        //{
+        //    foreach (Panel panel in panelList)
+        //    {
+        //        if (panel.Equals(panelToShow))
+        //        {
+        //            panel.Visible = true;
+        //        }
+        //        else
+        //        {
+        //            panel.Visible = false;
+        //        }
+        //    }
+        //}
+
         private (string host, string port) ParseAddress(string hostAndPort)
         {
             int colonIndex = hostAndPort.IndexOf(':');
@@ -143,7 +171,6 @@ namespace WordsGame
         }
 
 
-
         // ----------------------- CREATE GAME PANEL -----------------------
         private void hostButton_Click(object sender, EventArgs e)
         {
@@ -166,14 +193,26 @@ namespace WordsGame
             try
             {
                 MakeServer(parsed.host, parsed.port);
-                MakeClient(parsed.host, parsed.port, username);
-                ShowPanel(lobbyPanel);
+                //MakeClient(parsed.host, parsed.port, username);
+                //ShowPanel(lobbyPanel);
             }
             catch
             {
-                SetStatusMessage("Failed to create a game!");
+                SetStatusMessage("Failed to create a server!");
+                return;
             }
 
+            try
+            {
+                MakeClient(parsed.host, parsed.port, username);
+            }
+            catch
+            {
+                SetStatusMessage("Failed to create a client!");
+                return;
+            }
+
+            ShowPanel(lobbyPanel);
         }
 
         // ----------------------- JOIN GAME PANEL -----------------------
@@ -204,7 +243,8 @@ namespace WordsGame
                 SetStatusMessage("Failed to Connect!");
                 return;
             }
-            ShowPanel(gameplayPanel);
+            
+            ShowPanel(lobbyPanel);
             client.SendLogic(LogicController.playerConnected);
         }
 
@@ -252,25 +292,29 @@ namespace WordsGame
         {
             SetStatusMessage("Logic received");
 
-            //if (true)
-            //{
-            //    playersTextBox.Text += "Player connected" + '\n';
-            //}
-            //Console.WriteLine("logicReceived_Event");
-
             if (e.data[0] == LogicController.setAsArtist)
             {
                 SetStatusMessage("setAsArtist");
-                ShowPanel(gameplayPanel);
+                ShowPanel(chooseWordPanel);
             }
             else if (e.data[0] == LogicController.setAsGuesser)
             {
                 SetStatusMessage("setAsGuesser");
                 ShowPanel(gameplayPanel);
             }
-
-            
+            //ShowPanel(gameplayPanel);
         }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
