@@ -15,5 +15,8 @@ namespace WordsGame
         public static readonly byte sendWordsToChoose = 105;
         public static readonly byte gameStart       = 106;
         public static readonly byte sendChoosenWord = 107;
+        public static readonly byte sendMessage = 108;
+        public static readonly byte sendBitmap = 110;
+        
     }
 }

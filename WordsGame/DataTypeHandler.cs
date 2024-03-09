@@ -23,11 +23,13 @@ namespace WordsGame
                 bitmap.Save(ms, ImageFormat.Bmp);
                 byte[] bitmapData = ms.ToArray();
                 byte[] dataLength = BitConverter.GetBytes(bitmapData.Length);
-                byte[] readyBytes = new byte[1 + dataLength.Length + bitmapData.Length];
+                byte[] readyBytes = new byte[1 + 1 + dataLength.Length + bitmapData.Length];
 
-                readyBytes[0] = canvasDataType;
-                Array.Copy(dataLength, 0, readyBytes, 1, dataLength.Length);
-                Array.Copy(bitmapData, 0, readyBytes, 5, bitmapData.Length);
+                readyBytes[0] = logicDataType;
+                readyBytes[1] = LogicController.sendBitmap;
+
+                Array.Copy(dataLength, 0, readyBytes, 2, dataLength.Length);
+                Array.Copy(bitmapData, 0, readyBytes, 6, bitmapData.Length);
 
                 return readyBytes;
             }
@@ -36,12 +38,12 @@ namespace WordsGame
         public static Bitmap MakeBitmapFromData(byte[] data)
         {
             byte[] dataLengthBytes = new byte[4];
-            Array.Copy(data, 0, dataLengthBytes, 0, 4);
+            Array.Copy(data, 1, dataLengthBytes, 0, 4);
 
             int dataLength = BitConverter.ToInt32(dataLengthBytes, 0);
             byte[] bmpData = new byte[dataLength];
 
-            Array.Copy(data, 4, bmpData, 0, dataLength);
+            Array.Copy(data, 5, bmpData, 0, dataLength);
 
             using (var ms = new MemoryStream(bmpData))
             {

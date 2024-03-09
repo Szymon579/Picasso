@@ -84,24 +84,24 @@ namespace WordsGame
                     return;
                 }
                 Console.WriteLine("data router exited");
-                //return;
+                return;
                 
-                for (int i = 0; i < workers.Count; i++)
-                {
-                    Worker worker = workers[i];
-                    if (!worker.Equals(from))
-                    {
-                        try
-                        {
-                            worker.Send(data);
-                        }
-                        catch (Exception)
-                        {
-                            workers.RemoveAt(i--);
-                            worker.Close();
-                        }
-                    }
-                }
+                //for (int i = 0; i < workers.Count; i++)
+                //{
+                //    Worker worker = workers[i];
+                //    if (!worker.Equals(from))
+                //    {
+                //        try
+                //        {
+                //            worker.Send(data);
+                //        }
+                //        catch (Exception)
+                //        {
+                //            workers.RemoveAt(i--);
+                //            worker.Close();
+                //        }
+                //    }
+                //}
             }
 
         }
@@ -165,6 +165,44 @@ namespace WordsGame
             else if (logicCode == LogicController.sendChoosenWord)
             {
                 //TODO: send _ _ _ _ _ (letters count) to guessers
+            }
+            else if (logicCode == LogicController.sendMessage)
+            {
+                for (int i = 0; i < workers.Count; i++)
+                {
+                    Worker worker = workers[i];
+                    if (!worker.Equals(from))
+                    {
+                        try
+                        {
+                            worker.Send(data);
+                        }
+                        catch (Exception)
+                        {
+                            workers.RemoveAt(i--);
+                            worker.Close();
+                        }
+                    }
+                }
+            }
+            else if (logicCode == LogicController.sendBitmap)
+            {
+                for (int i = 0; i < workers.Count; i++)
+                {
+                    Worker worker = workers[i];
+                    if (!worker.Equals(from))
+                    {
+                        try
+                        {
+                            worker.Send(data);
+                        }
+                        catch (Exception)
+                        {
+                            workers.RemoveAt(i--);
+                            worker.Close();
+                        }
+                    }
+                }
             }
 
         }

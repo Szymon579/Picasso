@@ -71,7 +71,7 @@ namespace WordsGame
                 {
                     client = new Client(host, port);
                     client.MessageReceived += messageReceived_Event;
-                    client.CanvasReceived += canvasReceived_Event;
+                    //client.CanvasReceived += canvasReceived_Event;
                     client.LogicReceived += logicReceived_Event;
                     client.StartListeningForData();
 
@@ -313,8 +313,15 @@ namespace WordsGame
                 word2Button.Text = words.Item2;
                 word3Button.Text = words.Item3;
             }
-        }
+            else if (logicCode == LogicController.sendBitmap)
+            {
+                SetStatusMessage("Canvas received");
 
+                bmp = DataTypeHandler.MakeBitmapFromData(e.data);
+                graphics = Graphics.FromImage(bmp);
+                pictureBox.Image = bmp;
+            }
+        }
 
         // ----------------------- CHOOSE WORD PANEL -----------------------
         private void word1Button_Click(object sender, EventArgs e)
