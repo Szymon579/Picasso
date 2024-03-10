@@ -70,7 +70,7 @@ namespace WordsGame
                 //message = string.Format("{0}: {1}", from.Username, message);               
                 //IncomingMessage?.Invoke(this, new DataEventArgs(data));
 
-                if (data[0] == DataTypeHandler.logicDataType)
+                if (true)
                 {
                     try
                     {
@@ -108,7 +108,7 @@ namespace WordsGame
 
         private void logicRouter(Worker from, byte[] data)
         {
-            byte logicCode = data[1];
+            byte logicCode = data[0];
 
             if(logicCode == LogicController.playerConnected)
             {
@@ -136,23 +136,17 @@ namespace WordsGame
 
                 if (artist != null)
                 {
-                    byte[] buf = new byte[2];
-                    buf[0] = DataTypeHandler.logicDataType;
-                    buf[1] = LogicController.setAsArtist;
+                    byte[] buf = new byte[1];
+                    buf[0] = LogicController.setAsArtist;
                     artist.Send(buf);
 
 
                     byte[] words = gameManager.getWords();
-                    byte[] readyBytes = new byte[words.Length + 1];
-                    Array.Copy(words, 0, readyBytes, 1, words.Length);
-                    readyBytes[0] = DataTypeHandler.logicDataType;
-
-                    artist.Send(readyBytes);
+                    artist.Send(words);
                 }
 
-                byte[] bufer = new byte[2];
-                bufer[0] = DataTypeHandler.logicDataType;
-                bufer[1] = LogicController.setAsGuesser;
+                byte[] bufer = new byte[1];
+                bufer[0] = LogicController.setAsGuesser;
 
                 List<Worker> guessers = gameManager.getGuessers();
                 for (int i = 0; i < guessers.Count; i++)

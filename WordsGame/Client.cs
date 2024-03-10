@@ -71,21 +71,10 @@ namespace WordsGame
                     if (receivedBytes < 1)
                         break;
 
-                    byte[] bytes = new byte[receivedBytes - 1];
-                    Array.Copy(buffer, 1, bytes, 0, receivedBytes - 1);
+                    byte[] bytes = new byte[receivedBytes];
+                    Array.Copy(buffer, 0, bytes, 0, receivedBytes);
 
-                    if (buffer[0] == DataTypeHandler.messageDataType)
-                    {
-                        MessageReceived?.Invoke(this, new DataEventArgs(bytes));
-                    }
-                    else if (buffer[0] == DataTypeHandler.canvasDataType)
-                    {
-                        CanvasReceived?.Invoke(this, new DataEventArgs(bytes));
-                    }
-                    else if (buffer[0] == DataTypeHandler.logicDataType)
-                    {
-                        LogicReceived?.Invoke(this, new DataEventArgs(bytes));
-                    }
+                    LogicReceived?.Invoke(this, new DataEventArgs(bytes));       
 
                 }
             }

@@ -70,7 +70,7 @@ namespace WordsGame
                 await Task.Run(() =>
                 {
                     client = new Client(host, port);
-                    client.MessageReceived += messageReceived_Event;
+                    //client.MessageReceived += messageReceived_Event;
                     //client.CanvasReceived += canvasReceived_Event;
                     client.LogicReceived += logicReceived_Event;
                     client.StartListeningForData();
@@ -320,6 +320,14 @@ namespace WordsGame
                 bmp = DataTypeHandler.MakeBitmapFromData(e.data);
                 graphics = Graphics.FromImage(bmp);
                 pictureBox.Image = bmp;
+            }
+            else if (logicCode == LogicController.sendMessage)
+            {
+                SetStatusMessage("Message received");
+
+                string message = Encoding.UTF8.GetString(e.data, 1, e.data.Length - 1);
+                Console.WriteLine(message);
+                trafficTextBox.Text += message + '\n';
             }
         }
 
