@@ -35,6 +35,7 @@
             pictureBox = new PictureBox();
             labelPictureBox = new Label();
             gameplayPanel = new Panel();
+            wordTextBox = new TextBox();
             menuPanel = new Panel();
             createGameButton = new Button();
             joinGameButton = new Button();
@@ -133,6 +134,7 @@
             // 
             // gameplayPanel
             // 
+            gameplayPanel.Controls.Add(wordTextBox);
             gameplayPanel.Controls.Add(labelPictureBox);
             gameplayPanel.Controls.Add(pictureBox);
             gameplayPanel.Controls.Add(label1);
@@ -143,6 +145,13 @@
             gameplayPanel.Name = "gameplayPanel";
             gameplayPanel.Size = new Size(665, 329);
             gameplayPanel.TabIndex = 13;
+            // 
+            // wordTextBox
+            // 
+            wordTextBox.Location = new Point(273, 30);
+            wordTextBox.Name = "wordTextBox";
+            wordTextBox.Size = new Size(135, 23);
+            wordTextBox.TabIndex = 13;
             // 
             // menuPanel
             // 
@@ -489,5 +498,6 @@
         private Button word1Button;
         private Panel artistPanel;
         private Label wordToDrawLabel;
+        private TextBox wordTextBox;
     }
 }

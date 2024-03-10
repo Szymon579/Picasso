@@ -3,21 +3,69 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace WordsGame
 {
     class Round
     {
+        List<Worker> players;
         Worker artist;
-        string word;
-        //System.Timers.Timer timer;
+        List<Worker> remainingArtists;
+        
 
-        public Round()
+        string word;
+        static System.Timers.Timer timer;
+
+        public Round(List<Worker> players)
         {
-            
+            this.remainingArtists = new List<Worker>(players);
+            this.players = new List<Worker>(players);
+
+            SetTimer();
         }
 
-        public void chooseWord()
+        private static void SetTimer()
+        {
+            timer = new System.Timers.Timer(10000);
+ 
+            timer.Elapsed += OnTimeoutEvent;
+            timer.Enabled = true;
+        }
+
+        private static void OnTimeoutEvent(Object source, ElapsedEventArgs e)
+        {
+            Console.WriteLine("Timer timeout");
+        }
+        public Worker ChooseArtist()
+        {
+            if (remainingArtists.Count < 1)
+            {
+                return null;
+            }
+
+            artist = remainingArtists[remainingArtists.Count - 1];
+            remainingArtists.Remove(artist);
+
+            return artist;
+        }
+        public List<Worker> GetGuessers()
+        {
+            List<Worker> guessers = new List<Worker>();
+            
+            for (int i = 0; i < players.Count; i++)
+            {
+                Worker worker = players[i];
+                if (!worker.Equals(artist))
+                {
+                    guessers.Add(worker);
+                }
+            }
+
+            return guessers;
+        }
+
+        public void ChooseWord()
         {
 
         }

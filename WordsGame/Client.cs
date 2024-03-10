@@ -34,7 +34,7 @@ namespace WordsGame
         public void SendMessage(string message)
         {
             message = username + ": " + message;
-            byte[] data = DataTypeHandler.MakeDataFromString(message);
+            byte[] data = DataTypeHandler.MakeDataFromMessage(message);
             stream.Write(data, 0, data.Length);
         }
 

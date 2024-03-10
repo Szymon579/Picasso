@@ -12,9 +12,6 @@ namespace WordsGame
 {
     static class DataTypeHandler
     {
-        //public static byte canvasDataType = 200;
-        //public static byte messageDataType = 100;
-        //public static byte logicDataType = 255;
 
         public static byte[] MakeDataFromBitmap(Bitmap bitmap)
         {
@@ -50,9 +47,9 @@ namespace WordsGame
             }
         }
 
-        public static byte[] MakeDataFromString(string str)
+        public static byte[] MakeDataFromMessage(string message)
         {
-            byte[] messageBytes = Encoding.UTF8.GetBytes(str);
+            byte[] messageBytes = Encoding.UTF8.GetBytes(message);
             byte[] readyBytes = new byte[messageBytes.Length + 1];
 
             readyBytes[0] = LogicController.sendMessage;
@@ -62,18 +59,24 @@ namespace WordsGame
             return readyBytes;
         }
 
-        public static byte[] MakeLogicFromData(byte[] data)
+        public static string MakeMessageFromData(byte[] data)
         {
-            return data;
+            string message = Encoding.UTF8.GetString(data, 1, data.Length - 1);
+
+            return message;
         }
 
         public static byte[] MakeDataFromLogic(byte logicCode)
         {
             byte[] readyBytes = new byte[1];
-
             readyBytes[0] = logicCode;
 
             return readyBytes;
+        }
+        
+        public static byte[] MakeLogicFromData(byte[] data)
+        {
+            return data;
         }
 
         public static byte[] MakeDataFromLogic(byte logicCode, string str)
@@ -85,6 +88,15 @@ namespace WordsGame
             Array.Copy(stringBytes, 0, readyBytes, 1, stringBytes.Length);
 
             return readyBytes;
+        }
+
+
+        public static byte[] MakeDataFromWords(List<string> words)
+        {
+            string str = string.Join(" ", words);
+            byte[] bytes = Encoding.UTF8.GetBytes(str);
+
+            return bytes;
         }
 
         public static (string, string, string) MakeWordsFromData(byte[] data)

@@ -10,16 +10,13 @@ namespace WordsGame
     {
         int noRounds;
         Worker host;
-        Worker artist;
         Round round;
         List<Worker> players;
-        List<Worker> remainingArtists;
 
         GameManager() 
         {
             noRounds = 0;
             host = null;
-            artist = null;
             round = null;
             players = null;
         }
@@ -28,58 +25,31 @@ namespace WordsGame
             this.noRounds = noRounds;
             this.host = host;
             this.players = players;
-            this.remainingArtists = players;
+        }
+        public void StartGame()
+        {
+            round = new Round(players);
         }
 
-        public Worker chooseArtist()
+        public Worker GetArtist()
         {
-            if(remainingArtists.Count < 1) 
-            {
-                return null;
-            }
-
-            artist = remainingArtists[remainingArtists.Count - 1];
-            remainingArtists.Remove(artist);
-
-            return artist;
+            return round.ChooseArtist();
         }
 
         public List<Worker> getGuessers() 
         {
-            //List<Worker> guessers = new List<Worker>();
-            //foreach(Worker worker in players) 
-            //{ 
-            //    if(!artist.Equals(worker)) 
-            //        guessers.Add(worker);
-            //}
-            //return guessers;
-
-            return remainingArtists;
+            return round.GetGuessers();
         }
 
-        public void StartGame()
-        {
-            round = new Round();
-            
-            //for (int i = 0; i < noRounds; i++)
-            //{
-            //    round = new Round();
-            //}
+        
 
-            //FinishGame();
-        }
-
-        public byte[] getWords()
+        public List<string> GetRandomWords()
         {
             List<string> words = round.GetRandomWords(3);
-            string str = string.Join(" ", words);
-              
-            byte[] bytes = DataTypeHandler.MakeDataFromString(str);
-            bytes[0] = LogicController.sendWordsToChoose;
-
-            Console.WriteLine("getWords");
-            return bytes;          
+            return words;          
         }
+
+
 
         public void FinishGame() 
         {

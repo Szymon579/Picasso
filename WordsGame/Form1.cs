@@ -9,9 +9,10 @@ namespace WordsGame
 {
     public partial class MainForm : Form
     {
+        private List<Panel> panelList;
+
         private Client client;
         private Server server;
-        bool host;
 
         Bitmap bmp;
         Graphics graphics;
@@ -20,12 +21,8 @@ namespace WordsGame
         Point pPrevious;
         Pen pen = new Pen(Color.Black, 2);
 
-        private List<Panel> panelList;
-
         public MainForm()
         {
-            host = false;
-
             InitializeComponent();
             InitPainting();
 
@@ -39,7 +36,6 @@ namespace WordsGame
             panelList.Add(artistPanel);
 
             ShowPanel(menuPanel);
-            
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -47,57 +43,10 @@ namespace WordsGame
             messageTextBox.KeyPress += new System.Windows.Forms.KeyPressEventHandler(SubmitMessage);
         }
 
-        private async void MakeServer(string host, string port)
-        {
-            try
-            {
-                await Task.Run(() =>
-                {
-                    server = new Server(host, port);
-                    server.WaitForConnection();
-                });
-            }
-            catch (IOException error)
-            {
-                Console.WriteLine(error.ToString());
-            }
-        }
-
-        private async void MakeClient(string host, string port, string username)
-        {
-            try
-            {
-                await Task.Run(() =>
-                {
-                    client = new Client(host, port);
-                    //client.MessageReceived += messageReceived_Event;
-                    //client.CanvasReceived += canvasReceived_Event;
-                    client.LogicReceived += logicReceived_Event;
-                    client.StartListeningForData();
-
-                    client.SendMessage(username);
-                    client.SetUsername(username);
-
-
-                    //pictureBoxHandler = new PictureBoxHandler(ref client, ref pictureBox);
-                    //pictureBoxHandler.InitPainting();
-                    //pictureBox.MouseDown += pictureBoxHandler.MouseDownEvent;
-                    //pictureBox.MouseUp += pictureBoxHandler.MouseUpEvent;
-                    //pictureBox.MouseMove += pictureBoxHandler.MouseMoveEvent;
-                });
-            }
-            catch (Exception error)
-            {
-                Console.WriteLine(error.ToString());
-                SetStatusMessage("Connection failed");
-            }
-        }
 
         delegate void ShowPanelCallback(Panel panelToShow);
-
         private void ShowPanel(Panel panelToShow)
         {
-
             foreach (Panel panel in panelList)
             {
                 if (panel.InvokeRequired)
@@ -116,14 +65,13 @@ namespace WordsGame
                         panel.Visible = false;
                     }
                 }
-
             }
         }
+
 
         delegate void SetTextCallback(ref Button button, string text);
         private void SetText(ref Button button, string text)
         {
-
             if (button.InvokeRequired)
             {
                 SetTextCallback d = new SetTextCallback(SetText);
@@ -134,6 +82,7 @@ namespace WordsGame
                 button.Text = text;
             }
         }
+
 
         private (string host, string port) ParseAddress(string hostAndPort)
         {
@@ -159,10 +108,51 @@ namespace WordsGame
         }
 
 
+        private async void MakeServer(string host, string port)
+        {
+            try
+            {
+                await Task.Run(() =>
+                {
+                    server = new Server(host, port);
+                    server.WaitForConnection();
+                });
+            }
+            catch (IOException error)
+            {
+                Console.WriteLine(error.ToString());
+            }
+        }
+
+
+        private async void MakeClient(string host, string port, string username)
+        {
+            try
+            {
+                await Task.Run(() =>
+                {
+                    client = new Client(host, port);
+
+                    client.LogicReceived += logicReceived_Event;
+                    client.StartListeningForData();
+
+                    client.SendMessage(username);
+                    client.SetUsername(username);
+                });
+            }
+            catch (Exception error)
+            {
+                Console.WriteLine(error.ToString());
+                SetStatusMessage("Connection failed");
+            }
+        }
+
+
+
+
         // ----------------------- MENU PANEL -----------------------
         private void createGameButton_Click(object sender, EventArgs e)
         {
-            host = true;
             ShowPanel(createGamePanel);
         }
 
@@ -183,7 +173,6 @@ namespace WordsGame
                 SetStatusMessage("Game server cannot be empty!");
                 return;
             }
-
             if (username == string.Empty)
             {
                 SetStatusMessage("Username cannot be empty!");
@@ -225,7 +214,6 @@ namespace WordsGame
                 SetStatusMessage("Game server cannot be empty!");
                 return;
             }
-
             if (username == string.Empty)
             {
                 SetStatusMessage("Username cannot be empty!");
@@ -257,8 +245,6 @@ namespace WordsGame
         }
 
 
-        // ----------------------- LOBBY PANEL -----------------------
-
 
         // ----------------------- GAMEPLAY PANEL -----------------------
         private void SubmitMessage(object sender, KeyPressEventArgs e)
@@ -270,23 +256,7 @@ namespace WordsGame
                 messageTextBox.Text = string.Empty;
             }
         }
-        private void messageReceived_Event(object sender, DataEventArgs e)
-        {
-            string message = Encoding.UTF8.GetString(e.data);
-            Console.WriteLine(message);
-            trafficTextBox.Text += message + '\n';
 
-            SetStatusMessage("Message received");
-        }
-
-        private void canvasReceived_Event(object sender, DataEventArgs e)
-        {
-            bmp = DataTypeHandler.MakeBitmapFromData(e.data);
-            graphics = Graphics.FromImage(bmp);
-            pictureBox.Image = bmp;
-
-            SetStatusMessage("Canvas received");
-        }
         private void logicReceived_Event(object sender, DataEventArgs e)
         {
             SetStatusMessage("Logic received");
@@ -297,6 +267,7 @@ namespace WordsGame
             {
                 SetStatusMessage("setAsArtist");
                 ShowPanel(chooseWordPanel);
+                pictureBox.Enabled = true;
             }
             else if (logicCode == LogicController.setAsGuesser)
             {
@@ -329,31 +300,37 @@ namespace WordsGame
                 Console.WriteLine(message);
                 trafficTextBox.Text += message + '\n';
             }
+            else if (logicCode == LogicController.sendHint)
+            {
+                SetStatusMessage("Hint received");
+
+                string hint = Encoding.UTF8.GetString(e.data, 1, e.data.Length - 1);
+                wordTextBox.Text = hint;
+            }
         }
+
 
         // ----------------------- CHOOSE WORD PANEL -----------------------
         private void word1Button_Click(object sender, EventArgs e)
         {
             client.SendLogic(LogicController.sendChoosenWord, word1Button.Text);
+            wordTextBox.Text = word1Button.Text;
             ShowPanel(gameplayPanel);
         }
 
         private void word2Button_Click(object sender, EventArgs e)
         {
             client.SendLogic(LogicController.sendChoosenWord, word2Button.Text);
+            wordTextBox.Text = word2Button.Text;
             ShowPanel(gameplayPanel);
         }
 
         private void word3Button_Click(object sender, EventArgs e)
         {
             client.SendLogic(LogicController.sendChoosenWord, word3Button.Text);
+            wordTextBox.Text = word3Button.Text;
             ShowPanel(gameplayPanel);
         }
-
-
-
-
-
 
         // ----------------------- CANVAS -----------------------
         void InitPainting()

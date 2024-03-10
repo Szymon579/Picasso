@@ -70,53 +70,29 @@ namespace WordsGame
                 //message = string.Format("{0}: {1}", from.Username, message);               
                 //IncomingMessage?.Invoke(this, new DataEventArgs(data));
 
-                if (true)
+                try
                 {
-                    try
-                    {
-                        logicRouter(from, data);
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine(ex.ToString());
-                    }
-                    
-                    return;
+                    logicRouter(from, data);
                 }
-                Console.WriteLine("data router exited");
-                return;
-                
-                //for (int i = 0; i < workers.Count; i++)
-                //{
-                //    Worker worker = workers[i];
-                //    if (!worker.Equals(from))
-                //    {
-                //        try
-                //        {
-                //            worker.Send(data);
-                //        }
-                //        catch (Exception)
-                //        {
-                //            workers.RemoveAt(i--);
-                //            worker.Close();
-                //        }
-                //    }
-                //}
-            }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.ToString());
+                }
 
+            }
         }
 
-        private void logicRouter(Worker from, byte[] data)
+        private void logicRouter(Worker sender, byte[] data)
         {
             byte logicCode = data[0];
 
             if(logicCode == LogicController.playerConnected)
             {
-                from.Send(DataTypeHandler.MakeDataFromString("player conn"));
+                sender.Send(DataTypeHandler.MakeDataFromMessage("player conn"));
             }
             else if (logicCode == LogicController.setAsHost)
             {
-                hostWorker = from;
+                hostWorker = sender;
                 Console.WriteLine("Worker set as host");
             }
             else if(logicCode == LogicController.setAsArtist)
@@ -132,21 +108,18 @@ namespace WordsGame
                 gameManager = new GameManager(3, null, ref workers);
                 gameManager.StartGame();
                 
-                Worker artist = gameManager.chooseArtist();
+                Worker artist = gameManager.GetArtist();
 
                 if (artist != null)
                 {
-                    byte[] buf = new byte[1];
-                    buf[0] = LogicController.setAsArtist;
+                    byte[] buf = DataTypeHandler.MakeDataFromLogic(LogicController.setAsArtist);
                     artist.Send(buf);
 
-
-                    byte[] words = gameManager.getWords();
+                    byte[] words = DataTypeHandler.MakeDataFromWords(gameManager.GetRandomWords());
                     artist.Send(words);
                 }
 
-                byte[] bufer = new byte[1];
-                bufer[0] = LogicController.setAsGuesser;
+                byte[] bufer = DataTypeHandler.MakeDataFromLogic(LogicController.setAsGuesser);
 
                 List<Worker> guessers = gameManager.getGuessers();
                 for (int i = 0; i < guessers.Count; i++)
@@ -159,46 +132,43 @@ namespace WordsGame
             else if (logicCode == LogicController.sendChoosenWord)
             {
                 //TODO: send _ _ _ _ _ (letters count) to guessers
+                string word = DataTypeHandler.MakeMessageFromData(data);
+                string hint = String.Concat(Enumerable.Repeat("_ ", word.Length));
+
+                byte[] hintBytes = DataTypeHandler.MakeDataFromLogic(LogicController.sendHint, hint);
+
+                SendToAllExceptSender(sender, hintBytes);
             }
             else if (logicCode == LogicController.sendMessage)
             {
-                for (int i = 0; i < workers.Count; i++)
-                {
-                    Worker worker = workers[i];
-                    if (!worker.Equals(from))
-                    {
-                        try
-                        {
-                            worker.Send(data);
-                        }
-                        catch (Exception)
-                        {
-                            workers.RemoveAt(i--);
-                            worker.Close();
-                        }
-                    }
-                }
+                //TODO: check for potential guess
+                SendToAllExceptSender(sender, data);
             }
             else if (logicCode == LogicController.sendBitmap)
             {
-                for (int i = 0; i < workers.Count; i++)
+                SendToAllExceptSender(sender, data);
+            }
+
+        }
+
+        private void SendToAllExceptSender(Worker sender, byte[] data)
+        {
+            for (int i = 0; i < workers.Count; i++)
+            {
+                Worker worker = workers[i];
+                if (!worker.Equals(sender))
                 {
-                    Worker worker = workers[i];
-                    if (!worker.Equals(from))
+                    try
                     {
-                        try
-                        {
-                            worker.Send(data);
-                        }
-                        catch (Exception)
-                        {
-                            workers.RemoveAt(i--);
-                            worker.Close();
-                        }
+                        worker.Send(data);
+                    }
+                    catch (Exception)
+                    {
+                        workers.RemoveAt(i--);
+                        worker.Close();
                     }
                 }
             }
-
         }
 
 
