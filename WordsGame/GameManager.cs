@@ -41,15 +41,20 @@ namespace WordsGame
             return round.GetGuessers();
         }
 
-        
-
         public List<string> GetRandomWords()
         {
             List<string> words = round.GetRandomWords(3);
             return words;          
         }
 
-
+        public void SetWord(string word) 
+        {
+            round.SetWord(word);
+        }
+        public bool CheckForGuess(string guess)
+        {
+            return round.CheckForGuess(guess);
+        }
 
         public void FinishGame() 
         {

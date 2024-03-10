@@ -65,9 +65,9 @@ namespace WordsGame
             return guessers;
         }
 
-        public void ChooseWord()
+        public void SetWord(string word)
         {
-
+            this.word = word;
         }
         
         public List<string> GetRandomWords(int count)
@@ -82,7 +82,7 @@ namespace WordsGame
             return words;
         }
 
-        public bool isGuessed(string guess)
+        public bool CheckForGuess(string guess)
         {
             return guess == word;
         }

@@ -59,7 +59,7 @@ namespace WordsGame
                     Array.Copy(buffer, bytes, receivedBytes);
 
                     if (username == null)
-                        username = Encoding.UTF8.GetString(buffer, 0, receivedBytes);
+                        username = Encoding.UTF8.GetString(buffer, 1, receivedBytes - 1);
                     else
                         DataReceived?.Invoke(this, new DataEventArgs(bytes));
                 }

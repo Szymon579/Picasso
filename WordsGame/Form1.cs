@@ -235,16 +235,12 @@ namespace WordsGame
             client.SendLogic(LogicController.playerConnected);
         }
 
-
-
         // ----------------------- LOBBY PANEL -----------------------
         private void startGameButton_Click(object sender, EventArgs e)
         {
             //ShowPanel(chooseWordPanel);    
             client.SendLogic(LogicController.gameStart);
         }
-
-
 
         // ----------------------- GAMEPLAY PANEL -----------------------
         private void SubmitMessage(object sender, KeyPressEventArgs e)
@@ -268,12 +264,14 @@ namespace WordsGame
                 SetStatusMessage("setAsArtist");
                 ShowPanel(chooseWordPanel);
                 pictureBox.Enabled = true;
+                messageTextBox.Enabled = false;
             }
             else if (logicCode == LogicController.setAsGuesser)
             {
                 SetStatusMessage("setAsGuesser");
                 ShowPanel(gameplayPanel);
                 pictureBox.Enabled = false;
+                messageTextBox.Enabled = true;
             }
             else if (logicCode == LogicController.sendWordsToChoose)
             {

@@ -94,9 +94,13 @@ namespace WordsGame
         public static byte[] MakeDataFromWords(List<string> words)
         {
             string str = string.Join(" ", words);
-            byte[] bytes = Encoding.UTF8.GetBytes(str);
+            byte[] stringBytes = Encoding.UTF8.GetBytes(str);
+            byte[] readyBytes = new byte[stringBytes.Length + 1];
 
-            return bytes;
+            readyBytes[0] = LogicController.sendWordsToChoose;
+            Array.Copy(stringBytes, 0, readyBytes, 1, stringBytes.Length);
+
+            return readyBytes;
         }
 
         public static (string, string, string) MakeWordsFromData(byte[] data)
