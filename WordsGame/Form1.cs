@@ -13,6 +13,7 @@ namespace WordsGame
 
         private Client client;
         private Server server;
+        private bool hostApp = false;
 
         Bitmap bmp;
         Graphics graphics;
@@ -107,6 +108,11 @@ namespace WordsGame
             statusLabel.Text = message;
         }
 
+        private void NonHostOptionsDisable()
+        {
+            startGameButton.Enabled = false;
+            roundsUpDown.Enabled = false;
+        }
 
         private async void MakeServer(string host, string port)
         {
@@ -121,6 +127,7 @@ namespace WordsGame
             catch (IOException error)
             {
                 Console.WriteLine(error.ToString());
+                return;
             }
         }
 
@@ -144,7 +151,11 @@ namespace WordsGame
             {
                 Console.WriteLine(error.ToString());
                 SetStatusMessage("Connection failed");
+                return;
             }
+
+            if (!hostApp)
+                NonHostOptionsDisable();
         }
 
 
@@ -200,6 +211,7 @@ namespace WordsGame
                 return;
             }
 
+            hostApp = true;
             ShowPanel(lobbyPanel);
         }
 
@@ -231,6 +243,9 @@ namespace WordsGame
                 return;
             }
 
+            if (!hostApp)
+                NonHostOptionsDisable();
+
             ShowPanel(lobbyPanel);
             client.SendLogic(LogicController.playerConnected);
         }
@@ -240,6 +255,11 @@ namespace WordsGame
         {
             //ShowPanel(chooseWordPanel);    
             client.SendLogic(LogicController.gameStart);
+        }
+
+        private void UpdateLobby()
+        {
+            playersTextBox.Text += "lorem ipsum";
         }
 
         // ----------------------- GAMEPLAY PANEL -----------------------
@@ -298,12 +318,19 @@ namespace WordsGame
                 Console.WriteLine(message);
                 trafficTextBox.Text += message + '\n';
             }
-            else if (logicCode == LogicController.sendHint)
+            else if (logicCode == LogicController.sendNumOfLetters)
             {
                 SetStatusMessage("Hint received");
 
                 string hint = Encoding.UTF8.GetString(e.data, 1, e.data.Length - 1);
                 wordTextBox.Text = hint;
+            }
+            else if (logicCode == LogicController.updateLobby)
+            {
+                SetStatusMessage("Lobby updated");
+
+                string usernames = Encoding.UTF8.GetString(e.data, 1, e.data.Length - 1);
+                playersTextBox.Text = usernames;
             }
         }
 

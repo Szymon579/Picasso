@@ -13,7 +13,6 @@ namespace WordsGame
         //public event DataEventHandler IncomingMessage;
         private TcpListener serverSocket;
         private List<Worker> workers = new List<Worker>();
-        private Worker hostWorker;
         private GameManager gameManager;
         public Server(string host, string port)
         {
@@ -88,11 +87,11 @@ namespace WordsGame
 
             if(logicCode == LogicController.playerConnected)
             {
-                sender.Send(DataTypeHandler.MakeDataFromMessage("player conn"));
+                SendToAllExceptSender(null, DataTypeHandler.MakeDataFromLogic(
+                    LogicController.updateLobby, GetConnectedUsernames()));
             }
             else if (logicCode == LogicController.setAsHost)
             {
-                hostWorker = sender;
                 Console.WriteLine("Worker set as host");
             }
             else if (logicCode == LogicController.gameStart)
@@ -128,7 +127,7 @@ namespace WordsGame
                 gameManager.SetWord(word);
 
                 string hint = String.Concat(Enumerable.Repeat("_ ", word.Length));
-                byte[] hintBytes = DataTypeHandler.MakeDataFromLogic(LogicController.sendHint, hint);
+                byte[] hintBytes = DataTypeHandler.MakeDataFromLogic(LogicController.sendNumOfLetters, hint);
 
                 SendToAllExceptSender(sender, hintBytes);
             }
@@ -172,6 +171,18 @@ namespace WordsGame
                     }
                 }
             }
+        }
+
+        private string GetConnectedUsernames()
+        {
+            string usernames = "";
+
+            foreach (Worker worker in workers)
+            {
+                usernames += worker.username + '\n';
+            }
+
+            return usernames;
         }
 
 
