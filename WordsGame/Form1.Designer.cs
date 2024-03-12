@@ -218,7 +218,7 @@
             gameServerTextBox.Name = "gameServerTextBox";
             gameServerTextBox.Size = new Size(159, 23);
             gameServerTextBox.TabIndex = 2;
-            gameServerTextBox.Text = "192.168.93.1:4000";
+            gameServerTextBox.Text = "192.168.0.112:4000";
             // 
             // label3
             // 
@@ -290,7 +290,7 @@
             hostServerTextBox.Name = "hostServerTextBox";
             hostServerTextBox.Size = new Size(159, 23);
             hostServerTextBox.TabIndex = 7;
-            hostServerTextBox.Text = "192.168.93.1:4000";
+            hostServerTextBox.Text = "192.168.0.112:4000";
             // 
             // label4
             // 
@@ -431,13 +431,13 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(687, 377);
             Controls.Add(statusStrip);
+            Controls.Add(joinGamePanel);
             Controls.Add(gameplayPanel);
             Controls.Add(menuPanel);
             Controls.Add(createGamePanel);
             Controls.Add(artistPanel);
             Controls.Add(chooseWordPanel);
             Controls.Add(lobbyPanel);
-            Controls.Add(joinGamePanel);
             Name = "MainForm";
             Text = " ";
             Load += Form1_Load;

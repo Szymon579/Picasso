@@ -10,7 +10,6 @@ namespace WordsGame
 {
     class Server
     {
-        //public event DataEventHandler IncomingMessage;
         private TcpListener serverSocket;
         private List<Worker> workers = new List<Worker>();
         private GameManager gameManager;
@@ -66,26 +65,23 @@ namespace WordsGame
         {
             lock (this)
             {
-                //message = string.Format("{0}: {1}", from.Username, message);               
-                //IncomingMessage?.Invoke(this, new DataEventArgs(data));
-
                 try
                 {
-                    logicRouter(from, data);
+                    LogicRouter(from, data);
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex.ToString());
                 }
-
             }
         }
 
-        private void logicRouter(Worker sender, byte[] data)
+
+        private void LogicRouter(Worker sender, byte[] data)
         {
             byte logicCode = data[0];
 
-            if(logicCode == LogicController.playerConnected)
+            if (logicCode == LogicController.playerConnected)
             {
                 SendToAllExceptSender(null, DataTypeHandler.MakeDataFromLogic(
                     LogicController.updateLobby, GetConnectedUsernames()));
@@ -98,53 +94,16 @@ namespace WordsGame
             {
                 gameManager = new GameManager(3, null, ref workers);
                 gameManager.StartGame();
-                
-                Worker artist = gameManager.GetArtist();
-
-                if (artist != null)
-                {
-                    byte[] buf = DataTypeHandler.MakeDataFromLogic(LogicController.setAsArtist);
-                    artist.Send(buf);
-
-                    byte[] words = DataTypeHandler.MakeDataFromWords(gameManager.GetRandomWords());
-                    artist.Send(words);
-                }
-
-                byte[] bufer = DataTypeHandler.MakeDataFromLogic(LogicController.setAsGuesser);
-
-                List<Worker> guessers = gameManager.getGuessers();
-                for (int i = 0; i < guessers.Count; i++)
-                {
-                    guessers[i].Send(bufer);
-                    Console.WriteLine("Set as guesser");
-                }
-
+                gameManager.GetArtist();
+                gameManager.GetGuessers();
             }
             else if (logicCode == LogicController.sendChoosenWord)
             {
-                string word = DataTypeHandler.MakeMessageFromData(data);
-
-                gameManager.SetWord(word);
-
-                string hint = String.Concat(Enumerable.Repeat("_ ", word.Length));
-                byte[] hintBytes = DataTypeHandler.MakeDataFromLogic(LogicController.sendNumOfLetters, hint);
-
-                SendToAllExceptSender(sender, hintBytes);
+                gameManager.SetWord(data);
             }
             else if (logicCode == LogicController.sendMessage)
             {
-                //TODO: check for potential guess
-                string message = DataTypeHandler.MakeMessageFromData(data);
-                if (gameManager.CheckForGuess(message))
-                {
-                    SendToAllExceptSender(sender, DataTypeHandler.MakeDataFromMessage(sender.username + " has guessed!"));
-                    //return;
-                }
-                else
-                {
-                    SendToAllExceptSender(sender, DataTypeHandler.MakeDataFromMessage(sender.username + ": " + message));
-                    //SendToAllExceptSender(sender, data);
-                }
+                gameManager.CheckForGuess(sender, data);
             }
             else if (logicCode == LogicController.sendBitmap)
             {

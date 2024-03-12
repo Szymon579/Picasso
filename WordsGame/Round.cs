@@ -12,7 +12,6 @@ namespace WordsGame
         List<Worker> players;
         Worker artist;
         List<Worker> remainingArtists;
-        
 
         string word;
         static System.Timers.Timer timer;
@@ -37,6 +36,7 @@ namespace WordsGame
         {
             Console.WriteLine("Timer timeout");
         }
+
         public Worker ChooseArtist()
         {
             if (remainingArtists.Count < 1)
@@ -49,6 +49,7 @@ namespace WordsGame
 
             return artist;
         }
+
         public List<Worker> GetGuessers()
         {
             List<Worker> guessers = new List<Worker>();
@@ -69,7 +70,11 @@ namespace WordsGame
         {
             this.word = word;
         }
-        
+        public Worker GetArtist()
+        {
+            return artist;
+        }
+
         public List<string> GetRandomWords(int count)
         {
             List<string> words = new List<string>();

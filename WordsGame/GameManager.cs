@@ -31,14 +31,30 @@ namespace WordsGame
             round = new Round(players);
         }
 
-        public Worker GetArtist()
+        public void GetArtist()
         {
-            return round.ChooseArtist();
+            Worker artist = round.ChooseArtist();
+
+            if (artist != null)
+            {
+                byte[] buf = DataTypeHandler.MakeDataFromLogic(LogicController.setAsArtist);
+                artist.Send(buf);
+
+                byte[] words = DataTypeHandler.MakeDataFromWords(GetRandomWords());
+                artist.Send(words);
+            }
         }
 
-        public List<Worker> getGuessers() 
+        public void GetGuessers() 
         {
-            return round.GetGuessers();
+            byte[] bufer = DataTypeHandler.MakeDataFromLogic(LogicController.setAsGuesser);
+
+            List<Worker> guessers = round.GetGuessers();
+            for (int i = 0; i < guessers.Count; i++)
+            {
+                guessers[i].Send(bufer);
+                Console.WriteLine("Set as guesser");
+            }
         }
 
         public List<string> GetRandomWords()
@@ -47,14 +63,55 @@ namespace WordsGame
             return words;          
         }
 
-        public void SetWord(string word) 
+        public void SetWord(byte[]data) 
         {
+
+            string word = DataTypeHandler.MakeMessageFromData(data);
+
             round.SetWord(word);
+
+            string hint = String.Concat(Enumerable.Repeat("_ ", word.Length));
+            byte[] hintBytes = DataTypeHandler.MakeDataFromLogic(LogicController.sendNumOfLetters, hint);
+
+            SendToAllExcept(round.GetArtist(), hintBytes);
+
         }
-        public bool CheckForGuess(string guess)
+        public void CheckForGuess(Worker sender, byte[] data)
         {
-            return round.CheckForGuess(guess);
+            string message = DataTypeHandler.MakeMessageFromData(data);
+            if (round.CheckForGuess(message))
+            {
+                SendToAllExcept(sender, 
+                    DataTypeHandler.MakeDataFromMessage(sender.username + " has guessed!"));
+            }
+            else
+            {
+                SendToAllExcept(sender, 
+                    DataTypeHandler.MakeDataFromMessage(sender.username + ": " + message));
+            }
         }
+
+        private void SendToAllExcept(Worker sender, byte[] data)
+        {
+            for (int i = 0; i < players.Count; i++)
+            {
+                Worker worker = players[i];
+                if (!worker.Equals(sender))
+                {
+                    try
+                    {
+                        worker.Send(data);
+                    }
+                    catch (Exception)
+                    {
+                        players.RemoveAt(i--);
+                        worker.Close();
+                    }
+                }
+            }
+        }
+
+
 
         public void FinishGame() 
         {

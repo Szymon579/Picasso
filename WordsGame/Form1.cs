@@ -159,6 +159,67 @@ namespace WordsGame
         }
 
 
+        private void logicReceived_Event(object sender, DataEventArgs e)
+        {
+            SetStatusMessage("Logic received");
+
+            byte logicCode = e.data[0];
+
+            if (logicCode == LogicController.setAsArtist)
+            {
+                SetStatusMessage("setAsArtist");
+                ShowPanel(chooseWordPanel);
+                pictureBox.Enabled = true;
+                messageTextBox.Enabled = false;
+            }
+            else if (logicCode == LogicController.setAsGuesser)
+            {
+                SetStatusMessage("setAsGuesser");
+                ShowPanel(gameplayPanel);
+                pictureBox.Enabled = false;
+                messageTextBox.Enabled = true;
+            }
+            else if (logicCode == LogicController.sendWordsToChoose)
+            {
+                SetStatusMessage("Choose word");
+
+                var words = DataTypeHandler.MakeWordsFromData(e.data);
+                word1Button.Text = words.Item1;
+                word2Button.Text = words.Item2;
+                word3Button.Text = words.Item3;
+            }
+            else if (logicCode == LogicController.sendBitmap)
+            {
+                SetStatusMessage("Canvas received");
+
+                bmp = DataTypeHandler.MakeBitmapFromData(e.data);
+                graphics = Graphics.FromImage(bmp);
+                pictureBox.Image = bmp;
+            }
+            else if (logicCode == LogicController.sendMessage)
+            {
+                SetStatusMessage("Message received");
+
+                string message = Encoding.UTF8.GetString(e.data, 1, e.data.Length - 1);
+                Console.WriteLine(message);
+                trafficTextBox.Text += message + '\n';
+            }
+            else if (logicCode == LogicController.sendNumOfLetters)
+            {
+                SetStatusMessage("Number of letters received");
+
+                string noLetters = Encoding.UTF8.GetString(e.data, 1, e.data.Length - 1);
+                wordTextBox.Text = noLetters;
+            }
+            else if (logicCode == LogicController.updateLobby)
+            {
+                SetStatusMessage("Lobby updated");
+
+                string usernames = Encoding.UTF8.GetString(e.data, 1, e.data.Length - 1);
+                playersTextBox.Text = usernames;
+            }
+        }
+
 
 
         // ----------------------- MENU PANEL -----------------------
@@ -252,15 +313,10 @@ namespace WordsGame
 
         // ----------------------- LOBBY PANEL -----------------------
         private void startGameButton_Click(object sender, EventArgs e)
-        {
-            //ShowPanel(chooseWordPanel);    
+        {  
             client.SendLogic(LogicController.gameStart);
         }
 
-        private void UpdateLobby()
-        {
-            playersTextBox.Text += "lorem ipsum";
-        }
 
         // ----------------------- GAMEPLAY PANEL -----------------------
         private void SubmitMessage(object sender, KeyPressEventArgs e)
@@ -273,66 +329,7 @@ namespace WordsGame
             }
         }
 
-        private void logicReceived_Event(object sender, DataEventArgs e)
-        {
-            SetStatusMessage("Logic received");
-
-            byte logicCode = e.data[0];
-
-            if (logicCode == LogicController.setAsArtist)
-            {
-                SetStatusMessage("setAsArtist");
-                ShowPanel(chooseWordPanel);
-                pictureBox.Enabled = true;
-                messageTextBox.Enabled = false;
-            }
-            else if (logicCode == LogicController.setAsGuesser)
-            {
-                SetStatusMessage("setAsGuesser");
-                ShowPanel(gameplayPanel);
-                pictureBox.Enabled = false;
-                messageTextBox.Enabled = true;
-            }
-            else if (logicCode == LogicController.sendWordsToChoose)
-            {
-                SetStatusMessage("Choose word");
-
-                var words = DataTypeHandler.MakeWordsFromData(e.data);
-                word1Button.Text = words.Item1;
-                word2Button.Text = words.Item2;
-                word3Button.Text = words.Item3;
-            }
-            else if (logicCode == LogicController.sendBitmap)
-            {
-                SetStatusMessage("Canvas received");
-
-                bmp = DataTypeHandler.MakeBitmapFromData(e.data);
-                graphics = Graphics.FromImage(bmp);
-                pictureBox.Image = bmp;
-            }
-            else if (logicCode == LogicController.sendMessage)
-            {
-                SetStatusMessage("Message received");
-
-                string message = Encoding.UTF8.GetString(e.data, 1, e.data.Length - 1);
-                Console.WriteLine(message);
-                trafficTextBox.Text += message + '\n';
-            }
-            else if (logicCode == LogicController.sendNumOfLetters)
-            {
-                SetStatusMessage("Hint received");
-
-                string hint = Encoding.UTF8.GetString(e.data, 1, e.data.Length - 1);
-                wordTextBox.Text = hint;
-            }
-            else if (logicCode == LogicController.updateLobby)
-            {
-                SetStatusMessage("Lobby updated");
-
-                string usernames = Encoding.UTF8.GetString(e.data, 1, e.data.Length - 1);
-                playersTextBox.Text = usernames;
-            }
-        }
+        
 
 
         // ----------------------- CHOOSE WORD PANEL -----------------------
@@ -356,6 +353,10 @@ namespace WordsGame
             wordTextBox.Text = word3Button.Text;
             ShowPanel(gameplayPanel);
         }
+
+
+
+
 
         // ----------------------- CANVAS -----------------------
         void InitPainting()
