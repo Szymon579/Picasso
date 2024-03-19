@@ -92,10 +92,8 @@ namespace WordsGame
             }
             else if (logicCode == LogicController.gameStart)
             {
-                gameManager = new GameManager(3, null, ref workers);
-                gameManager.StartGame();
-                gameManager.GetArtist();
-                gameManager.GetGuessers();
+                gameManager = new GameManager(3, sender, ref workers);
+                gameManager.StartNewRound();
             }
             else if (logicCode == LogicController.sendChoosenWord)
             {
@@ -143,7 +141,6 @@ namespace WordsGame
 
             return usernames;
         }
-
 
 
     }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -9,70 +10,43 @@ namespace WordsGame
 {
     class Round
     {
-        List<Worker> players;
         Worker artist;
-        List<Worker> remainingArtists;
-
+        List<Worker> guessers;
+        
         string word;
-        static System.Timers.Timer timer;
+        public event EventHandler endOfRound;
 
-        public Round(List<Worker> players)
+        static System.Timers.Timer roundTimer;
+        static System.Timers.Timer chooseWordTimer;
+        static System.Timers.Timer scoreboardTimer;
+
+        public Round(Worker artist, List<Worker> guessers)
         {
-            this.remainingArtists = new List<Worker>(players);
-            this.players = new List<Worker>(players);
+            this.artist = artist;
+            this.guessers = guessers;
 
-            SetTimer();
+            SetTimers(15, 10, 5);
         }
 
-        private static void SetTimer()
+        public void StartChooseWordTimer()
         {
-            timer = new System.Timers.Timer(10000);
- 
-            timer.Elapsed += OnTimeoutEvent;
-            timer.Enabled = true;
-        }
-
-        private static void OnTimeoutEvent(Object source, ElapsedEventArgs e)
-        {
-            Console.WriteLine("Timer timeout");
-        }
-
-        public Worker ChooseArtist()
-        {
-            if (remainingArtists.Count < 1)
-            {
-                return null;
-            }
-
-            artist = remainingArtists[remainingArtists.Count - 1];
-            remainingArtists.Remove(artist);
-
-            return artist;
-        }
-
-        public List<Worker> GetGuessers()
-        {
-            List<Worker> guessers = new List<Worker>();
-            
-            for (int i = 0; i < players.Count; i++)
-            {
-                Worker worker = players[i];
-                if (!worker.Equals(artist))
-                {
-                    guessers.Add(worker);
-                }
-            }
-
-            return guessers;
+            chooseWordTimer.Enabled = true;
         }
 
         public void SetWord(string word)
         {
             this.word = word;
+            roundTimer.Enabled = true;
+            
         }
         public Worker GetArtist()
         {
             return artist;
+        }
+
+        public List<Worker> GetGuesers()
+        {
+            return guessers;
         }
 
         public List<string> GetRandomWords(int count)
@@ -82,14 +56,58 @@ namespace WordsGame
             words.Add("POL");
             words.Add("ENG");
             words.Add("FRA");
-            //TODO: handle getting words from file
 
             return words;
         }
 
-        public bool CheckForGuess(string guess)
+        public bool CheckForGuess(Worker sender, string guess)
         {
-            return guess == word;
+
+            if (word == guess && guessers.Contains(sender))
+            {
+                guessers.Remove(sender);
+
+                if (guessers.Count == 0)
+                    endOfRound?.Invoke(this, null);
+
+                return true;
+            }
+            return false;
+        }
+
+        private static void SetTimers(int roundTime, int chooseWordTime, int scoreboardTime)
+        {
+            roundTime *= 1000;
+            chooseWordTime *= 1000;
+            scoreboardTime *= 1000;
+
+            roundTimer = new System.Timers.Timer(roundTime);
+            roundTimer.Enabled = false;
+            roundTimer.Elapsed += OnTurnTimeoutEvent;
+
+            chooseWordTimer = new System.Timers.Timer(chooseWordTime);
+            chooseWordTimer.Enabled = false;
+            chooseWordTimer.Elapsed += OnChooseWordTimeoutEvent;
+
+            scoreboardTimer = new System.Timers.Timer(scoreboardTime);
+            scoreboardTimer.Enabled = false;
+            scoreboardTimer.Elapsed += OnScoreboardTimeoutEvent;
+        }
+
+        private static void OnTurnTimeoutEvent(Object source, ElapsedEventArgs e)
+        {
+            Console.WriteLine("Round timeout");
+        }
+
+        private static void OnChooseWordTimeoutEvent(Object source, ElapsedEventArgs e)
+        {
+            Console.WriteLine("Choose word timeout");
+
+        }
+
+        private static void OnScoreboardTimeoutEvent(Object source, ElapsedEventArgs e)
+        {
+            Console.WriteLine("Scoreboard timeout");
         }
 
     }

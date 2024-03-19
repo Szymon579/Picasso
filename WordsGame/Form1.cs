@@ -35,6 +35,7 @@ namespace WordsGame
             panelList.Add(lobbyPanel);
             panelList.Add(chooseWordPanel);
             panelList.Add(artistPanel);
+            panelList.Add(scoresPanel);
 
             ShowPanel(menuPanel);
         }
@@ -218,6 +219,16 @@ namespace WordsGame
                 string usernames = Encoding.UTF8.GetString(e.data, 1, e.data.Length - 1);
                 playersTextBox.Text = usernames;
             }
+            else if (logicCode == LogicController.displayScores)
+            {
+                SetStatusMessage("Scores");
+                ShowPanel(scoresPanel);           
+            }
+            else if (logicCode == LogicController.endOfRound)
+            {
+                SetStatusMessage("End of round");
+                graphics.Clear(Color.White);
+            }
         }
 
 
@@ -327,9 +338,7 @@ namespace WordsGame
                 trafficTextBox.Text += messageTextBox.Text + "\n";
                 messageTextBox.Text = string.Empty;
             }
-        }
-
-        
+        }   
 
 
         // ----------------------- CHOOSE WORD PANEL -----------------------
@@ -353,7 +362,6 @@ namespace WordsGame
             wordTextBox.Text = word3Button.Text;
             ShowPanel(gameplayPanel);
         }
-
 
 
 

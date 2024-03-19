@@ -19,6 +19,9 @@ namespace WordsGame
         public static readonly byte sendBitmap = 110;
         public static readonly byte sendNumOfLetters = 111;
         public static readonly byte updateLobby = 112;
+        public static readonly byte displayScores = 113;
+        public static readonly byte endOfRound = 114;
+
 
     }
 }

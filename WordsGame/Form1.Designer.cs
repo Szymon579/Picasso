@@ -65,6 +65,9 @@
             word1Button = new Button();
             artistPanel = new Panel();
             wordToDrawLabel = new Label();
+            scoresPanel = new Panel();
+            richTextBox1 = new RichTextBox();
+            label8 = new Label();
             ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
             gameplayPanel.SuspendLayout();
             menuPanel.SuspendLayout();
@@ -75,6 +78,7 @@
             ((System.ComponentModel.ISupportInitialize)roundsUpDown).BeginInit();
             chooseWordPanel.SuspendLayout();
             artistPanel.SuspendLayout();
+            scoresPanel.SuspendLayout();
             SuspendLayout();
             // 
             // label1
@@ -425,11 +429,38 @@
             wordToDrawLabel.TabIndex = 0;
             wordToDrawLabel.Text = "word to draw";
             // 
+            // scoresPanel
+            // 
+            scoresPanel.Controls.Add(richTextBox1);
+            scoresPanel.Controls.Add(label8);
+            scoresPanel.Location = new Point(11, 12);
+            scoresPanel.Name = "scoresPanel";
+            scoresPanel.Size = new Size(665, 329);
+            scoresPanel.TabIndex = 21;
+            // 
+            // richTextBox1
+            // 
+            richTextBox1.Location = new Point(286, 111);
+            richTextBox1.Name = "richTextBox1";
+            richTextBox1.Size = new Size(100, 139);
+            richTextBox1.TabIndex = 1;
+            richTextBox1.Text = "blablabla";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(286, 95);
+            label8.Name = "label8";
+            label8.Size = new Size(44, 15);
+            label8.TabIndex = 0;
+            label8.Text = "Scores:";
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(687, 377);
+            Controls.Add(scoresPanel);
             Controls.Add(statusStrip);
             Controls.Add(joinGamePanel);
             Controls.Add(gameplayPanel);
@@ -457,6 +488,8 @@
             chooseWordPanel.ResumeLayout(false);
             artistPanel.ResumeLayout(false);
             artistPanel.PerformLayout();
+            scoresPanel.ResumeLayout(false);
+            scoresPanel.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -499,5 +532,8 @@
         private Panel artistPanel;
         private Label wordToDrawLabel;
         private TextBox wordTextBox;
+        private Panel scoresPanel;
+        private RichTextBox richTextBox1;
+        private Label label8;
     }
 }
